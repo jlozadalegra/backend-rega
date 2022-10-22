@@ -1,26 +1,80 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateSistemaRegDto } from './dto/create-sistema_reg.dto';
 import { UpdateSistemaRegDto } from './dto/update-sistema_reg.dto';
+import { sistemaRegRepository } from './entities/sistema_reg.repository';
+import { sistema_reg } from './entities/sistema_reg.entity';
 
 @Injectable()
 export class SistemaRegService {
-  create(createSistemaRegDto: CreateSistemaRegDto) {
-    return 'This action adds a new sistemaReg';
+  async create(createSistemaRegDto: CreateSistemaRegDto): Promise<sistema_reg> {
+    const CreateSistemaReg = sistemaRegRepository.create(createSistemaRegDto);
+    return await sistemaRegRepository.save(CreateSistemaReg);
   }
 
-  findAll() {
-    return `This action returns all sistemaReg`;
+  async findAll(): Promise<sistema_reg[]> {
+    try {
+      return await sistemaRegRepository.find();
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} sistemaReg`;
+  async findUnidad(id: string): Promise<sistema_reg[]> {
+    const NumUnidad = await sistemaRegRepository.find({
+      where: { Num_unidad_reg: id },
+    });
+
+    if (!NumUnidad.length) {
+      throw new HttpException('Elemento no encontrado', HttpStatus.NOT_FOUND);
+    }
+
+    return NumUnidad;
   }
 
-  update(id: number, updateSistemaRegDto: UpdateSistemaRegDto) {
-    return `This action updates a #${id} sistemaReg`;
+  async findByCod(cod: number): Promise<sistema_reg> {
+    const CodReg = await sistemaRegRepository.findOneBy({Co_reg: cod });
+
+    if (!CodReg) {
+      throw new HttpException('Elemento no encontrado', HttpStatus.NOT_FOUND);
+    }
+
+    return CodReg;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} sistemaReg`;
+  async update(
+    cod: number,
+    updateSistemaRegDto: UpdateSistemaRegDto,
+  ): Promise<any> {
+    //try {
+    const FindCodReg = await sistemaRegRepository.findOneBy({ Co_reg: cod });
+
+    if (FindCodReg) {
+      return await sistemaRegRepository.update(
+        { Co_reg: cod },
+        updateSistemaRegDto,
+      );
+    } else {
+      throw new HttpException('Elemento no encontrado', HttpStatus.NOT_FOUND);
+    }
+    //} catch (error) {
+    //  throw new InternalServerErrorException(error.message);
+    //}
+  }
+
+  async remove(cod: number): Promise<any> {
+    const FindCodReg = await sistemaRegRepository.findOneBy({ Co_reg: cod });
+
+    if (FindCodReg) {
+      return await sistemaRegRepository.remove(FindCodReg);
+      //return await sistemaRegRepository.delete({Co_reg: cod});
+    } else {
+      throw new HttpException('Elemento no encontrado', HttpStatus.NOT_FOUND);
+    }
   }
 }
