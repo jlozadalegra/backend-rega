@@ -1,11 +1,12 @@
 import { Type } from "class-transformer";
 import { IsEnum, IsNumber, IsString, IsDate, IsNotEmpty } from "class-validator";
-import { ENT_SAL_ENUM } from "../enum/ent_sal.enum";
+import { SistemaNombresReg } from "src/rega/entities";
+import { ENT_SAL_ENUM } from "../enum/sistema_reg.enum";
 
 export class CreateSistemaRegDto { 
   @IsString()
   @IsNotEmpty()
-  Co_nombre: string;
+  Co_nombre: SistemaNombresReg;
 
   @IsString()
   Num_unidad_reg: string;

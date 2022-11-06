@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { SistemaRegModule } from './sistema_reg/sistema_reg.module';
+//import { TypeOrmModule } from '@nestjs/typeorm';
+import { SistemaNombresRegModule } from './rega/modules';
+import { SistemaRegModule } from './rega/modules';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { SistemaRegModule } from './sistema_reg/sistema_reg.module';
       synchronize: true,
     }),*/
     SistemaRegModule,
+    SistemaNombresRegModule,
   ],
   controllers: [],
   providers: [],

@@ -1,9 +1,6 @@
-import {
-  Column,  
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { ENT_SAL_ENUM } from '../enum/ent_sal.enum';
+import { SistemaNombresReg } from 'src/rega/entities';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { ENT_SAL_ENUM } from '../enum/sistema_reg.enum';
 
 @Entity()
 export class sistema_reg {
@@ -11,7 +8,12 @@ export class sistema_reg {
   Co_reg: number;
 
   @Column({ type: 'varchar', length: 11 })
-  Co_nombre: string;
+  @ManyToOne(
+    (type) => SistemaNombresReg,
+    (Sistema_nombres_reg) => Sistema_nombres_reg.Co_usuario,
+  )
+  @JoinColumn({name: "Co_nombre"})
+  Co_nombre: SistemaNombresReg;
 
   @Column({ type: 'varchar', length: 4 })
   Num_unidad_reg: string;
@@ -32,7 +34,7 @@ export class sistema_reg {
   @Column({ type: 'varchar', length: 50 })
   aclar_adic: string;
 
-  @Column({type: 'date', default: "0000-00-00"})  
+  @Column({ type: 'date', default: '0000-00-00' })
   fecha: Date;
 
   @Column({ type: 'varchar', length: 200 })
@@ -50,6 +52,6 @@ export class sistema_reg {
   @Column({ type: 'varchar', length: 4 })
   year: string;
 
-  @Column({ type: 'varchar', length: 4, default: "R" })
+  @Column({ type: 'varchar', length: 4, default: 'R' })
   repartir: string;
 }

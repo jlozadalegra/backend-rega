@@ -7,9 +7,9 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { SistemaRegService } from './sistema_reg.service';
-import { CreateSistemaRegDto } from './dto/create-sistema_reg.dto';
-import { UpdateSistemaRegDto } from './dto/update-sistema_reg.dto';
+import { SistemaRegService } from '../services/sistema_reg.service';
+import { CreateSistemaRegDto } from '../dto/create-sistema_reg.dto';
+import { UpdateSistemaRegDto } from '../dto/update-sistema_reg.dto';
 
 @Controller('sistema-reg')
 export class SistemaRegController {

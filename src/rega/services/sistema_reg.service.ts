@@ -5,10 +5,10 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { CreateSistemaRegDto } from './dto/create-sistema_reg.dto';
-import { UpdateSistemaRegDto } from './dto/update-sistema_reg.dto';
-import { sistemaRegRepository } from './entities/sistema_reg.repository';
-import { sistema_reg } from './entities/sistema_reg.entity';
+import { CreateSistemaRegDto } from '../dto/create-sistema_reg.dto';
+import { UpdateSistemaRegDto } from '../dto/update-sistema_reg.dto';
+import { sistemaRegRepository } from '../repositories/sistema_reg.repository';
+import { sistema_reg } from '../entities/sistema_reg.entity';
 
 @Injectable()
 export class SistemaRegService {
@@ -19,7 +19,11 @@ export class SistemaRegService {
 
   async findAll(): Promise<sistema_reg[]> {
     try {
-      return await sistemaRegRepository.find();
+      return await sistemaRegRepository.find({
+        relations: {
+          Co_nombre: true,
+        },
+      });
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }
@@ -27,6 +31,9 @@ export class SistemaRegService {
 
   async findUnidad(id: string): Promise<sistema_reg[]> {
     const NumUnidad = await sistemaRegRepository.find({
+      relations: {
+        Co_nombre: true,
+      },
       where: { Num_unidad_reg: id },
     });
 
@@ -38,7 +45,7 @@ export class SistemaRegService {
   }
 
   async findByCod(cod: number): Promise<sistema_reg> {
-    const CodReg = await sistemaRegRepository.findOneBy({Co_reg: cod });
+    const CodReg = await sistemaRegRepository.findOneBy({ Co_reg: cod });
 
     if (!CodReg) {
       throw new HttpException('Elemento no encontrado', HttpStatus.NOT_FOUND);
