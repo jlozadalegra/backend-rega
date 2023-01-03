@@ -78,10 +78,10 @@ export class SistemaRegService {
   }
 
   async remove(id: number) {
-    const adelete = await this.SistemaRegRepo.findOneBy({ Co_reg: id });   
+    const adelete = await this.SistemaRegRepo.findOneBy({ Co_reg: id });
     if (adelete) {
-      return this.SistemaRegRepo.remove(adelete) ;
+      return this.SistemaRegRepo.remove(adelete);
     }
-    return null;     
+    return null;
   }
 }

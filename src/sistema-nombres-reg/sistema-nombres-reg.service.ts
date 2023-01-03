@@ -1,15 +1,27 @@
 import { Injectable } from '@nestjs/common';
+import { AppDataSource } from 'src/data-source';
+import { SistemaUnidadReg } from 'src/sistema-unidad-reg';
 import { CreateSistemaNombresRegDto } from './dto/create-sistema-nombres-reg.dto';
 import { UpdateSistemaNombresRegDto } from './dto/update-sistema-nombres-reg.dto';
+import { SistemaNombresReg } from './entities/sistema-nombres-reg.entity';
 
 @Injectable()
 export class SistemaNombresRegService {
+  private SistemaNombresRegRepo =
+    AppDataSource.getRepository(SistemaNombresReg);
+
   create(createSistemaNombresRegDto: CreateSistemaNombresRegDto) {
     return 'This action adds a new sistemaNombresReg';
   }
 
   findAll() {
-    return `This action returns all sistemaNombresReg`;
+    return this.SistemaNombresRegRepo.find();
+  }
+
+  async findAllNumUnidad(num: string): Promise<SistemaNombresReg[]> {
+    return await this.SistemaNombresRegRepo.find({
+      where: { Num_unidad_reg: num },
+    });
   }
 
   findOne(id: number) {
