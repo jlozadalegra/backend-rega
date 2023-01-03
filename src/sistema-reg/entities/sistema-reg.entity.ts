@@ -13,21 +13,28 @@ import {
 } from 'typeorm';
 import { ENT_SAL_ENUM } from './sistema-reg.enum';
 
-@Unique("co_reg_nr", ["Num_unidad_reg", "num_reg", "ent_sal", "year", "Co_pdest", "repartir"])
+@Unique('co_reg_nr', [
+  'Num_unidad_reg',
+  'num_reg',
+  'ent_sal',
+  'year',
+  'Co_pdest',
+  'repartir',
+])
 @Entity('sistema_reg')
 export class SistemaReg {
   @PrimaryGeneratedColumn()
   Co_reg: number;
 
   @ManyToOne(
-    (type) => SistemaNombresReg,
+    () => SistemaNombresReg,
     (sistemanombresReg) => sistemanombresReg.sistemareg,
   )
   @JoinColumn({ name: 'Co_nombre' })
   Co_nombre: SistemaNombresReg;
 
   @ManyToOne(
-    (type) => SistemaUnidadReg,
+    () => SistemaUnidadReg,
     (sistemaUnidadReg) => sistemaUnidadReg.sistemareg,
   )
   @JoinColumn({ name: 'Num_unidad_reg' })
@@ -42,7 +49,7 @@ export class SistemaReg {
 
   //Relacion Tabla tipos de documentos de la calidad
   @ManyToOne(
-    (type) => SistemaTipDocCal,
+    () => SistemaTipDocCal,
     (sistemaTipDocCal) => sistemaTipDocCal.sistemareg,
   )
   @JoinColumn({ name: 'Co_tdoc' })
@@ -62,17 +69,14 @@ export class SistemaReg {
 
   //Relacion Destino o Procedencia
   @ManyToOne(
-    (type) => SistemaProcDest,
+    () => SistemaProcDest,
     (sistemaProcDest) => sistemaProcDest.sistemareg,
   )
   @JoinColumn({ name: 'Co_pdest' })
   Co_pdest: SistemaProcDest;
 
   //Relación como llegó o entró el documento
-  @ManyToOne(
-    (type) => SistemaTipSal,
-    (sistemaTipSal) => sistemaTipSal.sistemareg,
-  )
+  @ManyToOne(() => SistemaTipSal, (sistemaTipSal) => sistemaTipSal.sistemareg)
   @JoinColumn({ name: 'Co_tipsal' })
   Co_tipsal: SistemaTipSal;
 

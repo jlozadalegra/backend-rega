@@ -4,7 +4,7 @@ import { aut_NC_ENUM } from './sistema-nombres-reg.enum';
 
 @Entity('sistema_nombres_reg')
 export class SistemaNombresReg {
-  @PrimaryColumn({ type: 'varchar', length: 11, default: '0' })  
+  @PrimaryColumn({ type: 'varchar', length: 11, default: '0' })
   Co_usuario: string;
 
   @Column({ type: 'varchar', length: 4 })
@@ -26,6 +26,6 @@ export class SistemaNombresReg {
   })
   aut_NC: aut_NC_ENUM; //enum SI y NO
 
-  @OneToMany((type) => SistemaReg, (sistemaReg) => sistemaReg.Co_nombre)
+  @OneToMany(() => SistemaReg, (sistemaReg) => sistemaReg.Co_nombre)
   sistemareg: SistemaReg[];
 }
