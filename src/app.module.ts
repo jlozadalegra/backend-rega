@@ -1,22 +1,18 @@
 import { Module } from '@nestjs/common';
-//import { TypeOrmModule } from '@nestjs/typeorm';
-import { SistemaNombresRegModule } from './rega/modules';
-import { SistemaRegModule } from './rega/modules';
-
+import { SistemaProcDestModule } from './sistema-proc-dest/sistema-proc-dest.module';
+import { SistemaRegModule } from './sistema-reg/sistema-reg.module';
+import { SistemaNombresRegModule } from './sistema-nombres-reg/sistema-nombres-reg.module';
+import { SistemaTipDocCalModule } from './sistema-tip-doc-cal/sistema-tip-doc-cal.module';
+import { SistemaTipSalModule } from './sistema-tip-sal/sistema-tip-sal.module';
+import { SistemaUnidadRegModule } from './sistema-unidad-reg/sistema-unidad-reg.module';
 @Module({
-  imports: [
-    /*TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 33306,
-      username: 'root',
-      password: 'root',
-      database: 'cpresup',
-      entities: [__dirname + "/entity/*{.js,.ts}"],
-      synchronize: true,
-    }),*/
+  imports: [        
+    SistemaProcDestModule,
     SistemaRegModule,
     SistemaNombresRegModule,
+    SistemaTipDocCalModule,
+    SistemaTipSalModule,
+    SistemaUnidadRegModule,
   ],
   controllers: [],
   providers: [],

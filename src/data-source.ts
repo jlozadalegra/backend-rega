@@ -1,7 +1,10 @@
 import { DataSource } from 'typeorm';
-import { SistemaNombresReg } from './rega/entities';
-import { sistema_reg } from './rega/entities';
-import { SistemaProDest } from './rega/entities';
+import { SistemaNombresReg } from './sistema-nombres-reg';
+import { SistemaProcDest } from './sistema-proc-dest';
+import { SistemaReg } from './sistema-reg';
+import { SistemaTipDocCal } from './sistema-tip-doc-cal';
+import { SistemaTipSal } from './sistema-tip-sal/entities/sistema-tip-sal.entity';
+import { SistemaUnidadReg } from './sistema-unidad-reg';
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
@@ -10,9 +13,17 @@ export const AppDataSource = new DataSource({
   username: 'root',
   password: 'root',
   database: 'cpresup',
-  synchronize: true,
+  synchronize: false,
   logging: true,
-  entities: [sistema_reg, SistemaNombresReg, SistemaProDest],
-  subscribers: [],
-  migrations: [],
+  entities: [
+    SistemaReg, 
+    SistemaNombresReg, 
+    SistemaProcDest,
+    SistemaTipDocCal,
+    SistemaTipSal,
+    SistemaUnidadReg
+  ],  
+  migrations: [
+    'migrate/*.ts'
+  ]  
 });

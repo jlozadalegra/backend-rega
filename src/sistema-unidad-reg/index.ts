@@ -1,0 +1,1 @@
+export * from "./entities/sistema-unidad-reg.entity"
