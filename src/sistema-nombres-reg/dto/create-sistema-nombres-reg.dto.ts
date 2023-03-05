@@ -1,5 +1,4 @@
 import { IsEnum, IsString } from 'class-validator';
-import { SistemaReg } from 'src/sistema-reg';
 import { aut_NC_ENUM } from '../entities/sistema-nombres-reg.enum';
 
 export class CreateSistemaNombresRegDto {
@@ -20,7 +19,4 @@ export class CreateSistemaNombresRegDto {
 
   @IsEnum(aut_NC_ENUM)
   aut_NC: aut_NC_ENUM; //enum SI y NO
-
-  @IsString()
-  sistemareg: SistemaReg[];
 }

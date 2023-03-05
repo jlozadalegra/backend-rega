@@ -1,26 +1,79 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { AppDataSource } from 'src/data-source';
 import { CreateSistemaTipSalDto } from './dto/create-sistema-tip-sal.dto';
 import { UpdateSistemaTipSalDto } from './dto/update-sistema-tip-sal.dto';
+import { SistemaTipSal } from './entities/sistema-tip-sal.entity';
 
 @Injectable()
 export class SistemaTipSalService {
-  create(createSistemaTipSalDto: CreateSistemaTipSalDto) {
-    return 'This action adds a new sistemaTipSal';
+  private TipSalRepo = AppDataSource.getRepository(SistemaTipSal);
+
+  async create(newrecord: CreateSistemaTipSalDto): Promise<SistemaTipSal> {
+    return await this.TipSalRepo.save(newrecord);
   }
 
-  findAll() {
-    return `This action returns all sistemaTipSal`;
+  async findAll() {
+    const found = await this.TipSalRepo.find();
+
+    if (!found.length) {
+      throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+    }
+
+    return {
+      statuscode: HttpStatus.OK,
+      message: 'OK',
+      data: found,
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} sistemaTipSal`;
+  //Buscar un único registro en la tabla
+  async findOne(id: string) {
+    const found = await this.TipSalRepo.findOne({
+      where: { Co_tipsal: id },
+    });
+
+    if (found == null)
+      throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+
+    return {
+      statuscode: HttpStatus.OK,
+      message: 'OK',
+      data: found,
+    };
   }
 
-  update(id: number, updateSistemaTipSalDto: UpdateSistemaTipSalDto) {
-    return `This action updates a #${id} sistemaTipSal`;
+  async editRecord(id: string, update: UpdateSistemaTipSalDto) {
+    const found = await this.TipSalRepo.findOneBy({ Co_tipsal: id });
+
+    if (found == null)
+      throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+
+    await this.TipSalRepo.update(id, update);
+
+    const modified = await this.TipSalRepo.findOne({
+      where: { Co_tipsal: id },
+      relations: {
+        sistemareg: true,
+      },
+    });
+
+    return {
+      statuscode: HttpStatus.OK,
+      message: 'OK',
+      data: modified,
+    };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} sistemaTipSal`;
+  async remove(id: string) {
+    const found = await this.TipSalRepo.findOneBy({ Co_tipsal: id });
+
+    if (found == null)
+      throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+
+    return {
+      statuscode: HttpStatus.OK,
+      message: 'OK',
+      data: await this.TipSalRepo.remove(found),
+    };
   }
 }

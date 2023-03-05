@@ -16,14 +16,12 @@ export const AppDataSource = new DataSource({
   synchronize: false,
   logging: true,
   entities: [
-    SistemaReg, 
-    SistemaNombresReg, 
+    SistemaReg,
+    SistemaNombresReg,
     SistemaProcDest,
     SistemaTipDocCal,
     SistemaTipSal,
-    SistemaUnidadReg
-  ],  
-  migrations: [
-    'migrate/*.ts'
-  ]  
+    SistemaUnidadReg,
+  ],
+  migrations: ['migrate/*.ts'],
 });

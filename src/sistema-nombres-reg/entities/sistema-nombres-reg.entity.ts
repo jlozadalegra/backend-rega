@@ -13,7 +13,7 @@ export class SistemaNombresReg {
   @Column({ type: 'varchar', length: 25 })
   identificador: string;
 
-  @Column({ type: 'varchar', length: 25, default: '' })
+  @Column({ type: 'varchar', length: 60, default: '' })
   passnreg: string;
 
   @Column({ type: 'varchar', length: 150 })

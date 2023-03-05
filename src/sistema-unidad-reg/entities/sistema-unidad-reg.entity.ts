@@ -10,11 +10,11 @@ export class SistemaUnidadReg {
   descripcionureg: string;
 
   @Column({ type: 'varchar', length: 50 })
-  encab_rega: string;  
+  encab_rega: string;
 
   @Column({ type: 'varchar', length: 100 })
   Ubic_docu: string;
 
   @OneToMany(() => SistemaReg, (sistemaReg) => sistemaReg.Num_unidad_reg)
-  sistemareg: SistemaReg[]
+  sistemareg: SistemaReg[];
 }

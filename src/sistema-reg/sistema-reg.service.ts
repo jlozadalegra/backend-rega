@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AppDataSource } from 'src/data-source';
 import { SistemaUnidadReg } from 'src/sistema-unidad-reg';
 import { CreateSistemaRegDto } from './dto/create-sistema-reg.dto';
@@ -16,11 +16,9 @@ export class SistemaRegService {
     const entsal = createSistemaRegDto.ent_sal;
     const repartir = createSistemaRegDto.repartir;
 
-    console.log(NumUnidad);
-
     const numreg = await this.consecutivo(NumUnidad, year, entsal, repartir);
 
-    const registro = this.SistemaRegRepo.create(createSistemaRegDto);
+    const registro = await this.SistemaRegRepo.create(createSistemaRegDto);
     registro.num_reg = numreg;
 
     return await this.SistemaRegRepo.save(registro);
@@ -38,8 +36,8 @@ export class SistemaRegService {
     });
   }
 
-  async findAllNumUnidad(num: SistemaUnidadReg): Promise<SistemaReg[]> {
-    return await this.SistemaRegRepo.find({
+  async findAllNumUnidad(num: SistemaUnidadReg) {
+    const found = await this.SistemaRegRepo.find({
       relations: {
         Co_nombre: true,
         Co_tdoc: true,
@@ -49,6 +47,16 @@ export class SistemaRegService {
       },
       where: { Num_unidad_reg: num },
     });
+
+    if (!found.length) {
+      throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+    }
+
+    return {
+      statuscode: HttpStatus.OK,
+      message: 'OK',
+      data: found,
+    };
   }
 
   //Función para Obtener el consecutivo del REGA
@@ -69,19 +77,65 @@ export class SistemaRegService {
     return maxi.max + 1;
   } //Fin
 
-  findOne(id: number) {
-    return `This action returns a #${id} sistemaReg`;
+  //Buscar un único registro en la tabla por el campo Co_reg
+  async findOne(id: number) {
+    const found = await this.SistemaRegRepo.findOne({
+      where: { Co_reg: id },
+      relations: {
+        Co_nombre: true,
+        Co_tdoc: true,
+        Co_pdest: true,
+        Co_tipsal: true,
+        Num_unidad_reg: true,
+      },
+    });
+
+    if (found == null)
+      throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+
+    return {
+      statuscode: HttpStatus.OK,
+      message: 'OK',
+      data: found,
+    };
   }
 
-  update(id: number, updateSistemaRegDto: UpdateSistemaRegDto) {
-    return `This action updates a #${id} sistemaReg`;
+  async editRecord(id: number, update: UpdateSistemaRegDto) {
+    const found = await this.SistemaRegRepo.findOneBy({ Co_reg: id });
+
+    if (found == null)
+      throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+
+    await this.SistemaRegRepo.update(id, update);
+
+    const modified = await this.SistemaRegRepo.findOne({
+      where: { Co_reg: id },
+      relations: {
+        Co_nombre: true,
+        Co_tdoc: true,
+        Co_pdest: true,
+        Co_tipsal: true,
+        Num_unidad_reg: true,
+      },
+    });
+
+    return {
+      statuscode: HttpStatus.OK,
+      message: 'OK',
+      data: modified,
+    };
   }
 
   async remove(id: number) {
-    const adelete = await this.SistemaRegRepo.findOneBy({ Co_reg: id });
-    if (adelete) {
-      return this.SistemaRegRepo.remove(adelete);
-    }
-    return null;
+    const found = await this.SistemaRegRepo.findOneBy({ Co_reg: id });
+
+    if (found == null)
+      throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+
+    return {
+      statuscode: HttpStatus.OK,
+      message: 'OK',
+      data: await this.SistemaRegRepo.remove(found),
+    };
   }
 }

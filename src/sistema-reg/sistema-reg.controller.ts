@@ -3,20 +3,16 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
-  Res,
-  HttpStatus,
-  HttpException,
-  Req,
   Query,
+  Put,
 } from '@nestjs/common';
 import { SistemaRegService } from './sistema-reg.service';
 import { CreateSistemaRegDto } from './dto/create-sistema-reg.dto';
 import { UpdateSistemaRegDto } from './dto/update-sistema-reg.dto';
-import { query } from 'express';
 import { SistemaUnidadReg } from 'src/sistema-unidad-reg';
+import { ParseIntPipe } from '@nestjs/common/pipes';
 
 @Controller('sistemareg')
 export class SistemaRegController {
@@ -33,18 +29,8 @@ export class SistemaRegController {
   }
 
   @Get('unidad/:num')
-  async findAllNumUnidad(@Res() res, @Param('num') num: SistemaUnidadReg) {
-    const data = await this.sistemaRegService.findAllNumUnidad(num);
-
-    if (!data.length) {
-      throw new HttpException('Registro no encontrado', HttpStatus.NOT_FOUND);
-    }
-
-    return res.status(HttpStatus.OK).json({
-      statuscode: HttpStatus.OK,
-      message: 'OK',
-      data: data,
-    });
+  findAllNumUnidad(@Param('num') num: SistemaUnidadReg) {
+    return this.sistemaRegService.findAllNumUnidad(num);
   }
 
   //Ruta para obtener el consecutivo del rega
@@ -59,30 +45,20 @@ export class SistemaRegController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.sistemaRegService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.sistemaRegService.findOne(id);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateSistemaRegDto: UpdateSistemaRegDto,
+  @Put(':id')
+  editRecord(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() update: UpdateSistemaRegDto,
   ) {
-    return this.sistemaRegService.update(+id, updateSistemaRegDto);
+    return this.sistemaRegService.editRecord(id, update);
   }
 
   @Delete(':id')
-  async remove(@Res() res, @Param('id') id: string) {
-    const data = await this.sistemaRegService.remove(+id);
-    
-    if (data == null) {
-      throw new HttpException('Registro no encontrado', HttpStatus.NOT_FOUND);
-    }
-
-    return res.status(HttpStatus.OK).json({
-      statuscode: HttpStatus.OK,
-      message: 'OK',
-      data: data,
-    });
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return await this.sistemaRegService.remove(id);
   }
 }

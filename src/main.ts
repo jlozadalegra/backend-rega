@@ -16,7 +16,7 @@ async function bootstrap() {
       console.log('Data Source has been initialized!');
     })
     .catch((error) => console.log(error));
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));  
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   await app.listen(PORT);
 }
 bootstrap();

@@ -5,15 +5,15 @@ import { DEL_SIT } from './sistema-proc-dest.enum';
 @Entity('sistema_proc_dest')
 export class SistemaProcDest {
   @PrimaryColumn({
-    type: "varchar",
+    type: 'varchar',
     length: 4,
-    default: "0"
+    default: '0',
   })
   Co_pdest: string;
 
   @Column({
-    type: "varchar",
-    length: 100
+    type: 'varchar',
+    length: 100,
   })
   descripcionpdest: string;
 
@@ -25,5 +25,5 @@ export class SistemaProcDest {
   del_sit: DEL_SIT;
 
   @OneToMany(() => SistemaReg, (sistemaReg) => sistemaReg.Co_pdest)
-  sistemareg: SistemaReg[]
+  sistemareg: SistemaReg[];
 }

@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Put,
+} from '@nestjs/common';
 import { SistemaTipSalService } from './sistema-tip-sal.service';
 import { CreateSistemaTipSalDto } from './dto/create-sistema-tip-sal.dto';
 import { UpdateSistemaTipSalDto } from './dto/update-sistema-tip-sal.dto';
@@ -19,16 +27,19 @@ export class SistemaTipSalController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.sistemaTipSalService.findOne(+id);
+    return this.sistemaTipSalService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSistemaTipSalDto: UpdateSistemaTipSalDto) {
-    return this.sistemaTipSalService.update(+id, updateSistemaTipSalDto);
+  @Put(':id')
+  editRecord(
+    @Param('id') id: string,
+    @Body() updateSistemaTipSalDto: UpdateSistemaTipSalDto,
+  ) {
+    return this.sistemaTipSalService.editRecord(id, updateSistemaTipSalDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.sistemaTipSalService.remove(+id);
+    return this.sistemaTipSalService.remove(id);
   }
 }
