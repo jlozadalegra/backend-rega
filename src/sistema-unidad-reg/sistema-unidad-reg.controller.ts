@@ -10,7 +10,9 @@ import {
 import { SistemaUnidadRegService } from './sistema-unidad-reg.service';
 import { CreateSistemaUnidadRegDto } from './dto/create-sistema-unidad-reg.dto';
 import { UpdateSistemaUnidadRegDto } from './dto/update-sistema-unidad-reg.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Control de Unidades')
 @Controller('units')
 export class SistemaUnidadRegController {
   constructor(
