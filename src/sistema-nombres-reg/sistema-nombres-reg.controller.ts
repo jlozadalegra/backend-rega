@@ -1,18 +1,30 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Put,
+} from '@nestjs/common';
 import { SistemaNombresRegService } from './sistema-nombres-reg.service';
 import { CreateSistemaNombresRegDto } from './dto/create-sistema-nombres-reg.dto';
 import { UpdateSistemaNombresRegDto } from './dto/update-sistema-nombres-reg.dto';
-import { Put } from '@nestjs/common/decorators';
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Control de usuarios')
 @Controller('users')
 export class SistemaNombresRegController {
   constructor(
     private readonly sistemaNombresRegService: SistemaNombresRegService,
   ) {}
 
+  @ApiBearerAuth()
   @Post()
-  create(@Body() createSistemaNombresRegDto: CreateSistemaNombresRegDto) {
-    return this.sistemaNombresRegService.create(createSistemaNombresRegDto);
+  async create(@Body() createSistemaNombresRegDto: CreateSistemaNombresRegDto) {
+    return await this.sistemaNombresRegService.create(
+      createSistemaNombresRegDto,
+    );
   }
 
   @Get()

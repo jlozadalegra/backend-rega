@@ -6,10 +6,10 @@ import { aut_NC_ENUM } from './sistema-nombres-reg.enum';
 export class SistemaNombresReg {
   @PrimaryColumn({ type: 'varchar', length: 11, default: '0' })
   Co_usuario: string;
-
-  @Column({ type: 'varchar', length: 4 })
+  
+  @Column({ type: 'varchar', length: 4 })  
   Num_unidad_reg: string;
-
+  
   @Column({ type: 'varchar', length: 25 })
   identificador: string;
 

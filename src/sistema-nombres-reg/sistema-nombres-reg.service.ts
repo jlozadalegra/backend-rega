@@ -47,17 +47,19 @@ export class SistemaNombresRegService {
 
   //Buscar un único registro en la tabla
   async findOne(id: string) {
-    const found = await this.NombresRegRepo.findOne({
+    const user = await this.NombresRegRepo.findOne({
       where: { Co_usuario: id },
     });
 
-    if (found == null)
+    if (user == null)
       throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+
+    const { passnreg, ...rest } = user;
 
     return {
       statuscode: HttpStatus.OK,
       message: 'OK',
-      data: found,
+      data: rest,
     };
   }
 

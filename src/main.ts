@@ -5,6 +5,8 @@ import 'dotenv/config';
 import { ValidationPipe } from '@nestjs/common';
 import { AppDataSource } from './data-source';
 
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+
 const PORT = process.env.PORT || '3000';
 
 async function bootstrap() {
@@ -17,6 +19,16 @@ async function bootstrap() {
     })
     .catch((error) => console.log(error));
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+
+  const config = new DocumentBuilder()
+    .setTitle('API Rega')
+    .setDescription('Control de Registros e Almest')
+    .setVersion('1.0')
+    .addTag('Rega')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
   await app.listen(PORT);
 }
 bootstrap();
