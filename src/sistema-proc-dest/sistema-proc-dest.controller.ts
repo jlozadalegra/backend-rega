@@ -10,7 +10,10 @@ import {
 import { SistemaProcDestService } from './sistema-proc-dest.service';
 import { CreateSistemaProcDestDto } from './dto/create-sistema-proc-dest.dto';
 import { UpdateSistemaProcDestDto } from './dto/update-sistema-proc-dest.dto';
-
+import { ApiTags } from '@nestjs/swagger';
+import { Auth } from 'src/common/auth.decorator';
+@ApiTags("Modulo Procedencia o Destino")
+@Auth()
 @Controller('sistemaprocdest')
 export class SistemaProcDestController {
   constructor(

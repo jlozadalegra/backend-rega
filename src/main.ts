@@ -24,6 +24,7 @@ async function bootstrap() {
     .setTitle('API Rega')
     .setDescription('Control de Registros e Almest')
     .setVersion('1.0')
+    .addBearerAuth()
     .addTag('Rega')
     .build();
   const document = SwaggerModule.createDocument(app, config);

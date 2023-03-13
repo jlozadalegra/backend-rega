@@ -10,7 +10,11 @@ import {
 import { SistemaTipDocCalService } from './sistema-tip-doc-cal.service';
 import { CreateSistemaTipDocCalDto } from './dto/create-sistema-tip-doc-cal.dto';
 import { UpdateSistemaTipDocCalDto } from './dto/update-sistema-tip-doc-cal.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { Auth } from 'src/common/auth.decorator';
 
+@ApiTags("Modulo Tipo Documento de Calidad")
+@Auth()
 @Controller('sistema-tip-doc-cal')
 export class SistemaTipDocCalController {
   constructor(

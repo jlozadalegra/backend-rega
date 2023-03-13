@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { AppDataSource } from 'src/data-source';
 import { CreateSistemaNombresRegDto } from './dto/create-sistema-nombres-reg.dto';
 import { UpdateSistemaNombresRegDto } from './dto/update-sistema-nombres-reg.dto';
@@ -51,15 +51,12 @@ export class SistemaNombresRegService {
       where: { Co_usuario: id },
     });
 
-    if (user == null)
-      throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
-
-    const { passnreg, ...rest } = user;
-
+    if (user == null) throw new NotFoundException('Usuario no encontrado');
+    
     return {
       statuscode: HttpStatus.OK,
       message: 'OK',
-      data: rest,
+      data: user,
     };
   }
 

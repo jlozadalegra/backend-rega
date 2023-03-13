@@ -10,7 +10,11 @@ import {
 import { SistemaTipSalService } from './sistema-tip-sal.service';
 import { CreateSistemaTipSalDto } from './dto/create-sistema-tip-sal.dto';
 import { UpdateSistemaTipSalDto } from './dto/update-sistema-tip-sal.dto';
+import { ApiTags } from '@nestjs/swagger';
+import { Auth } from 'src/common/auth.decorator';
 
+@ApiTags("Modulo soporte de Entrada o Salidad")
+@Auth()
 @Controller('sistema-tip-sal')
 export class SistemaTipSalController {
   constructor(private readonly sistemaTipSalService: SistemaTipSalService) {}

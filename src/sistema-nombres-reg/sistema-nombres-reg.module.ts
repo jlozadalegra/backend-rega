@@ -4,6 +4,7 @@ import { SistemaNombresRegController } from './sistema-nombres-reg.controller';
 
 @Module({
   controllers: [SistemaNombresRegController],
-  providers: [SistemaNombresRegService]
+  providers: [SistemaNombresRegService],
+  exports: [SistemaNombresRegService],
 })
 export class SistemaNombresRegModule {}

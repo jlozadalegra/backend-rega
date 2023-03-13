@@ -5,6 +5,8 @@ import { SistemaNombresRegModule } from './sistema-nombres-reg/sistema-nombres-r
 import { SistemaTipDocCalModule } from './sistema-tip-doc-cal/sistema-tip-doc-cal.module';
 import { SistemaTipSalModule } from './sistema-tip-sal/sistema-tip-sal.module';
 import { SistemaUnidadRegModule } from './sistema-unidad-reg/sistema-unidad-reg.module';
+import { AuthModule } from './auth/auth.module';
+
 @Module({
   imports: [        
     SistemaProcDestModule,
@@ -13,6 +15,7 @@ import { SistemaUnidadRegModule } from './sistema-unidad-reg/sistema-unidad-reg.
     SistemaTipDocCalModule,
     SistemaTipSalModule,
     SistemaUnidadRegModule,
+    AuthModule,    
   ],
   controllers: [],
   providers: [],

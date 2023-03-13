@@ -4,6 +4,7 @@ import { SistemaUnidadRegController } from './sistema-unidad-reg.controller';
 
 @Module({
   controllers: [SistemaUnidadRegController],
-  providers: [SistemaUnidadRegService]
+  providers: [SistemaUnidadRegService],
+  exports: [SistemaUnidadRegService],
 })
 export class SistemaUnidadRegModule {}

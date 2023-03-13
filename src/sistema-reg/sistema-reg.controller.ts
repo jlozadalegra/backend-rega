@@ -13,7 +13,11 @@ import { CreateSistemaRegDto } from './dto/create-sistema-reg.dto';
 import { UpdateSistemaRegDto } from './dto/update-sistema-reg.dto';
 import { SistemaUnidadReg } from 'src/sistema-unidad-reg';
 import { ParseIntPipe } from '@nestjs/common/pipes';
+import { ApiTags } from '@nestjs/swagger';
+import { Auth } from 'src/common/auth.decorator';
 
+@ApiTags("Modulo del Rega")
+@Auth()
 @Controller('sistemareg')
 export class SistemaRegController {
   constructor(private readonly sistemaRegService: SistemaRegService) {}

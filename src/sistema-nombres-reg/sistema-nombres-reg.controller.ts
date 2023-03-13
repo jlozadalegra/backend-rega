@@ -11,15 +11,16 @@ import { SistemaNombresRegService } from './sistema-nombres-reg.service';
 import { CreateSistemaNombresRegDto } from './dto/create-sistema-nombres-reg.dto';
 import { UpdateSistemaNombresRegDto } from './dto/update-sistema-nombres-reg.dto';
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Auth } from 'src/common/auth.decorator';
 
 @ApiTags('Control de usuarios')
+@Auth()
 @Controller('users')
 export class SistemaNombresRegController {
   constructor(
     private readonly sistemaNombresRegService: SistemaNombresRegService,
   ) {}
-
-  @ApiBearerAuth()
+  
   @Post()
   async create(@Body() createSistemaNombresRegDto: CreateSistemaNombresRegDto) {
     return await this.sistemaNombresRegService.create(
