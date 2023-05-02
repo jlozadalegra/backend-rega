@@ -9,12 +9,4 @@ export class CreateSistemaUnidadRegDto {
   @ApiProperty()
   @IsString()
   descripcionureg: string;
-
-  @ApiProperty()
-  @IsString()
-  encab_rega: string;
-
-  @ApiProperty()
-  @IsString()
-  Ubic_docu: string;
 }

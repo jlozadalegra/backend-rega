@@ -6,13 +6,15 @@ import { SistemaTipDocCal } from './sistema-tip-doc-cal';
 import { SistemaTipSal } from './sistema-tip-sal/entities/sistema-tip-sal.entity';
 import { SistemaUnidadReg } from './sistema-unidad-reg';
 
+import 'dotenv/config'; 
+
 export const AppDataSource = new DataSource({
-  type: 'mysql',
-  host: 'localhost',
-  port: 33306,
-  username: 'root',
-  password: 'root',
-  database: 'cpresup',
+  type: process.env.TYPEORM_CONNECTION as any,
+  host: process.env.TYPEORM_HOST,
+  port: parseInt(process.env.TYPEORM_PORT),
+  username: process.env.TYPEORM_USERNAME,
+  password: process.env.TYPEORM_PASSWORD,
+  database: process.env.TYPEORM_DATABASE,
   synchronize: false,
   logging: true,
   entities: [
@@ -22,6 +24,5 @@ export const AppDataSource = new DataSource({
     SistemaTipDocCal,
     SistemaTipSal,
     SistemaUnidadReg,
-  ],
-  migrations: ['migrate/*.ts'],
+  ]    
 });

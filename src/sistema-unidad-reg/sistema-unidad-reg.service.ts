@@ -8,39 +8,49 @@ import { SistemaUnidadReg } from './entities/sistema-unidad-reg.entity';
 export class SistemaUnidadRegService {
   private UnidadRegRepo = AppDataSource.getRepository(SistemaUnidadReg);
 
-  async create(
-    newrecord: CreateSistemaUnidadRegDto,
-  ): Promise<SistemaUnidadReg> {
-    return await this.UnidadRegRepo.save(newrecord);
+  //Insertar registros--------------------------------------------------------------------
+  async create(newrecord: CreateSistemaUnidadRegDto) {
+    const resul = await this.UnidadRegRepo.save(newrecord);
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'OK',
+      data: resul,
+    };
   }
 
+  //Obtener todos los registros-----------------------------------------------------------
   async findAll() {
     const found = await this.UnidadRegRepo.find();
     return {
-      statuscode: HttpStatus.OK,
+      statusCode: HttpStatus.OK,
       message: 'OK',
       data: found,
     };
   }
 
-  //Buscar un único registro en la tabla
-  async findOne(id: string) {
+  //Buscar un único registro en la tabla--------------------------------------------------
+  async findOne(id: number) {
     const found = await this.UnidadRegRepo.findOne({
-      where: { Num_unidad_reg: id },
+      where: { id: id },
+      relations: {
+        SistemaNombresReg: true,
+      },
     });
 
     if (found == null)
       throw new HttpException('Unidad no encontrada', HttpStatus.NOT_FOUND);
 
     return {
-      statuscode: HttpStatus.OK,
+      statusCode: HttpStatus.OK,
       message: 'OK',
       data: found,
     };
   }
 
-  async editRecord(id: string, update: UpdateSistemaUnidadRegDto) {
-    const found = await this.UnidadRegRepo.findOneBy({ Num_unidad_reg: id });
+  //Actualizar registros------------------------------------------------------------------
+  async editRecord(id: number, update: UpdateSistemaUnidadRegDto) {
+    const found = await this.UnidadRegRepo.findOneBy({ id: id });
 
     if (found == null)
       throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
@@ -48,27 +58,27 @@ export class SistemaUnidadRegService {
     await this.UnidadRegRepo.update(id, update);
 
     const modified = await this.UnidadRegRepo.findOne({
-      where: { Num_unidad_reg: id },
+      where: { id: id },
       relations: {
         sistemareg: true,
       },
     });
 
     return {
-      statuscode: HttpStatus.OK,
+      statusCode: HttpStatus.OK,
       message: 'OK',
       data: modified,
     };
   }
 
-  async remove(id: string) {
-    const found = await this.UnidadRegRepo.findOneBy({ Num_unidad_reg: id });
+  async remove(id: number) {
+    const found = await this.UnidadRegRepo.findOneBy({ id: id });
 
     if (found == null)
       throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
 
     return {
-      statuscode: HttpStatus.OK,
+      statusCode: HttpStatus.OK,
       message: 'OK',
       data: await this.UnidadRegRepo.remove(found),
     };

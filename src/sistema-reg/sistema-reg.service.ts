@@ -9,7 +9,45 @@ import { SistemaReg } from './entities/sistema-reg.entity';
 export class SistemaRegService {
   private SistemaRegRepo = AppDataSource.getRepository(SistemaReg);
 
-  async create(createSistemaRegDto: CreateSistemaRegDto): Promise<SistemaReg> {
+  //-------------------------------------------------------------------------------------
+  async _get() {
+    const id = 7;
+    const result = await this.SistemaRegRepo.createQueryBuilder('rega')
+      .select('rega.ent_sal', 'ent_sal')
+      .addSelect('rega.num_reg', 'num_reg')
+      .addSelect('rega.aclar_adic', 'aclar_adic')
+      .addSelect('rega.fecha', 'fecha')
+      .addSelect('rega.denomindoc', 'denomindoc')
+      .addSelect('rega.numejemp', 'numejemp')
+      .addSelect('rega.year', 'year')
+      .addSelect('rega.repartir', 'repartir')
+      .addSelect('rega.Co_nombre', 'Co_nombre')
+      .addSelect('rega.Num_unidad_reg', 'Num_unidad_reg')
+      .addSelect('rega.Co_tdoc', 'Co_tdoc')
+      .addSelect('rega.Co_pdest', 'Co_pdest')
+      .addSelect('rega.Co_tipsal', 'Co_tipsal')
+      .orderBy('Num_unidad_reg', 'ASC')
+      .orderBy('fecha', 'ASC')
+      .where('Num_unidad_reg = ' + id)
+      .getRawMany();
+
+    //const {Co_reg, ...value} = result;
+    return result;
+  }
+
+  //---------------------------------------------------------------------------------------
+  async _post(rows: any) {
+    const resul = await this.SistemaRegRepo.save(rows);
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'OK',
+      data: resul,
+    };
+  }
+
+  //Insertar registros---------------------------------------------------------------------
+  async create(createSistemaRegDto: CreateSistemaRegDto) {
     //num_reg
     const NumUnidad = createSistemaRegDto.Num_unidad_reg;
     const year = createSistemaRegDto.year;
@@ -21,9 +59,16 @@ export class SistemaRegService {
     const registro = await this.SistemaRegRepo.create(createSistemaRegDto);
     registro.num_reg = numreg;
 
-    return await this.SistemaRegRepo.save(registro);
+    const resul = await this.SistemaRegRepo.save(registro);
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'OK',
+      data: resul,
+    };
   }
 
+  //Obtener todos los registros------------------------------------------------------------
   findAll() {
     return this.SistemaRegRepo.find({
       relations: {
@@ -33,10 +78,14 @@ export class SistemaRegService {
         Co_tipsal: true,
         Num_unidad_reg: true,
       },
+      order: {
+        Co_reg: 'DESC',
+      },
     });
   }
 
-  async findAllNumUnidad(num: SistemaUnidadReg) {
+  //Obtener todos los registros de una unidad----------------------------------------------
+  async findAllNumUnidad(num: string) {
     const found = await this.SistemaRegRepo.find({
       relations: {
         Co_nombre: true,
@@ -45,7 +94,10 @@ export class SistemaRegService {
         Co_tipsal: true,
         Num_unidad_reg: true,
       },
-      where: { Num_unidad_reg: num },
+      where: { Num_unidad_reg: { id: num as any } },
+      order: {
+        Co_reg: 'DESC',
+      },
     });
 
     if (!found.length) {
@@ -53,13 +105,13 @@ export class SistemaRegService {
     }
 
     return {
-      statuscode: HttpStatus.OK,
+      statusCode: HttpStatus.OK,
       message: 'OK',
       data: found,
     };
   }
 
-  //Función para Obtener el consecutivo del REGA
+  //Función para Obtener el consecutivo del REGA--------------------------------------------
   async consecutivo(
     NumUnidad: SistemaUnidadReg,
     year: string,
@@ -77,7 +129,7 @@ export class SistemaRegService {
     return maxi.max + 1;
   } //Fin
 
-  //Buscar un único registro en la tabla por el campo Co_reg
+  //Buscar un único registro en la tabla por el campo Co_reg-------------------------------
   async findOne(id: number) {
     const found = await this.SistemaRegRepo.findOne({
       where: { Co_reg: id },
@@ -94,17 +146,21 @@ export class SistemaRegService {
       throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
 
     return {
-      statuscode: HttpStatus.OK,
+      statusCode: HttpStatus.OK,
       message: 'OK',
       data: found,
     };
   }
 
+  //Actualizar registros-------------------------------------------------------------------
   async editRecord(id: number, update: UpdateSistemaRegDto) {
     const found = await this.SistemaRegRepo.findOneBy({ Co_reg: id });
 
     if (found == null)
       throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+      
+      console.log("Rorber", update);
+
 
     await this.SistemaRegRepo.update(id, update);
 
@@ -120,12 +176,13 @@ export class SistemaRegService {
     });
 
     return {
-      statuscode: HttpStatus.OK,
+      statusCode: HttpStatus.OK,
       message: 'OK',
       data: modified,
     };
   }
 
+  //Eliminar registros--------------------------------------------------------------------
   async remove(id: number) {
     const found = await this.SistemaRegRepo.findOneBy({ Co_reg: id });
 
@@ -133,7 +190,7 @@ export class SistemaRegService {
       throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
 
     return {
-      statuscode: HttpStatus.OK,
+      statusCode: HttpStatus.OK,
       message: 'OK',
       data: await this.SistemaRegRepo.remove(found),
     };

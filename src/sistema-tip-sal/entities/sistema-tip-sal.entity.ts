@@ -1,9 +1,19 @@
 import { SistemaReg } from 'src/sistema-reg';
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 
+@Unique('tipsal_uq', ['Desc_tipsal'])
 @Entity('sistema_tipsal')
 export class SistemaTipSal {
-  @PrimaryColumn({ type: 'varchar', length: 6 })
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ type: 'varchar', length: 6, default: '' })
   Co_tipsal: string;
 
   @Column({ type: 'varchar', length: 25 })

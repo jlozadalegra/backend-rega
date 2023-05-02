@@ -1,10 +1,17 @@
 import { SistemaReg } from 'src/sistema-reg';
-import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { DEL_SIT } from './sistema-proc-dest.enum';
+
+@Unique('procdest_uq', [
+  'descripcionpdest',    
+])
 
 @Entity('sistema_proc_dest')
 export class SistemaProcDest {
-  @PrimaryColumn({
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({
     type: 'varchar',
     length: 4,
     default: '0',

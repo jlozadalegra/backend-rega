@@ -5,7 +5,6 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { SistemaNombresRegService } from 'src/sistema-nombres-reg';
-import { SistemaUnidadRegService } from 'src/sistema-unidad-reg';
 
 import { AuthDto } from './dto';
 
@@ -17,7 +16,6 @@ import { JWTPayload } from './jwt.payload';
 export class AuthService {
   constructor(
     private userService: SistemaNombresRegService,
-    private unitService: SistemaUnidadRegService,
     private jwtService: JwtService,
   ) {}
 
@@ -28,10 +26,8 @@ export class AuthService {
     const valid = await bcrypt.compare(authDto.password, user.data.passnreg);
     if (!valid) throw new UnauthorizedException('Contraseña incorrecta');
 
-    const unit = await this.unitService.findOne(user.data.Num_unidad_reg);
-
     const token = this.generateAccessToken(
-      user.data.Co_usuario,
+      String(user.data.id),
       user.data.datosgenerales,
     );
 
@@ -39,20 +35,20 @@ export class AuthService {
       statusCode: HttpStatus.OK,
       message: 'Usuario Logueado',
       data: {
-        idUsuario: user.data.Co_usuario,
+        idUsuario: user.data.id,
         usuario: user.data.datosgenerales,
         admin: user.data.aut_NC[0],
-        idUnidad: unit.data.Num_unidad_reg,
-        unidad: unit.data.descripcionureg,
-        access_token: token.access_token
+        idUnidad: user.data.Num_unidad_reg.id,
+        unidad: user.data.Num_unidad_reg.descripcionureg,
+        accessToken: token.accessToken,
       },
-    }
+    };
   }
 
   generateAccessToken(idUsuario: string, usuario: string) {
     const payload: JWTPayload = { idUsuario: idUsuario, usuario: usuario };
     return {
-      access_token: this.jwtService.sign(payload),
+      accessToken: this.jwtService.sign(payload),
     };
   }
 }

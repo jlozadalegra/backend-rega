@@ -6,14 +6,16 @@ import { SistemaUnidadRegModule } from 'src/sistema-unidad-reg';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtConsts } from 'src/constants';
 import { JwtStrategy } from './strategy';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
     SistemaNombresRegModule,
     SistemaUnidadRegModule,
+    PassportModule,
     JwtModule.register({
       secret: JwtConsts.JWT_ACCESS_SECRET,
-      signOptions: { expiresIn: '1d' },
+      signOptions: { expiresIn: '8h' },
     }),
   ],
   controllers: [AuthController],

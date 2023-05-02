@@ -14,23 +14,20 @@ import { SistemaUnidadReg } from 'src/sistema-unidad-reg';
 import { ENT_SAL_ENUM } from '../entities/sistema-reg.enum';
 
 export class CreateSistemaRegDto {
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   Co_nombre: SistemaNombresReg;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   Num_unidad_reg: SistemaUnidadReg;
 
   @IsEnum(ENT_SAL_ENUM)
   ent_sal: ENT_SAL_ENUM; //enum R/E y R/S
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   Co_tdoc: SistemaTipDocCal;
-
-  @IsString()
-  aclar_adic: string;
 
   @IsDate()
   @Type(() => Date)
@@ -39,11 +36,11 @@ export class CreateSistemaRegDto {
   @IsString()
   denomindoc: string;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   Co_pdest: SistemaProcDest;
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   Co_tipsal: SistemaTipSal;
 

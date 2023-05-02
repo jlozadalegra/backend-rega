@@ -8,10 +8,20 @@ import { SistemaTipSal } from './entities/sistema-tip-sal.entity';
 export class SistemaTipSalService {
   private TipSalRepo = AppDataSource.getRepository(SistemaTipSal);
 
-  async create(newrecord: CreateSistemaTipSalDto): Promise<SistemaTipSal> {
-    return await this.TipSalRepo.save(newrecord);
+  //Insertar registros---------------------------------------------------------------------
+  async create(
+    newrecord: CreateSistemaTipSalDto,
+  ): Promise<SistemaTipSal | any> {
+    const response = await this.TipSalRepo.save(newrecord);
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'OK',
+      data: response,
+    };
   }
 
+  //Obtener registros----------------------------------------------------------------------
   async findAll() {
     const found = await this.TipSalRepo.find();
 
@@ -20,30 +30,31 @@ export class SistemaTipSalService {
     }
 
     return {
-      statuscode: HttpStatus.OK,
+      statusCode: HttpStatus.OK,
       message: 'OK',
       data: found,
     };
   }
 
-  //Buscar un único registro en la tabla
-  async findOne(id: string) {
+  //Buscar un único registro en la tabla---------------------------------------------------
+  async findOne(id: number) {
     const found = await this.TipSalRepo.findOne({
-      where: { Co_tipsal: id },
+      where: { id: id },
     });
 
     if (found == null)
       throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
 
     return {
-      statuscode: HttpStatus.OK,
+      statusCode: HttpStatus.OK,
       message: 'OK',
       data: found,
     };
   }
 
-  async editRecord(id: string, update: UpdateSistemaTipSalDto) {
-    const found = await this.TipSalRepo.findOneBy({ Co_tipsal: id });
+  //Actualizar registros------------------------------------------------------------------
+  async editRecord(id: number, update: UpdateSistemaTipSalDto) {
+    const found = await this.TipSalRepo.findOneBy({ id: id });
 
     if (found == null)
       throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
@@ -51,27 +62,28 @@ export class SistemaTipSalService {
     await this.TipSalRepo.update(id, update);
 
     const modified = await this.TipSalRepo.findOne({
-      where: { Co_tipsal: id },
+      where: { id: id },
       relations: {
         sistemareg: true,
       },
     });
 
     return {
-      statuscode: HttpStatus.OK,
+      statusCode: HttpStatus.OK,
       message: 'OK',
       data: modified,
     };
   }
 
-  async remove(id: string) {
-    const found = await this.TipSalRepo.findOneBy({ Co_tipsal: id });
+  //Eliminar registros---------------------------------------------------------------------
+  async remove(id: number) {
+    const found = await this.TipSalRepo.findOneBy({ id: id });
 
     if (found == null)
       throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
 
     return {
-      statuscode: HttpStatus.OK,
+      statusCode: HttpStatus.OK,
       message: 'OK',
       data: await this.TipSalRepo.remove(found),
     };

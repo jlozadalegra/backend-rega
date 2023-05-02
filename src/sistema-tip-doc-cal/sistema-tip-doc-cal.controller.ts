@@ -32,13 +32,13 @@ export class SistemaTipDocCalController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.sistemaTipDocCalService.findOne(id);
   }
 
   @Put(':id')
   editRecord(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateSistemaTipDocCalDto: UpdateSistemaTipDocCalDto,
   ) {
     return this.sistemaTipDocCalService.editRecord(
@@ -48,7 +48,7 @@ export class SistemaTipDocCalController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.sistemaTipDocCalService.remove(id);
   }
 }

@@ -14,13 +14,13 @@ import { ApiTags } from '@nestjs/swagger';
 import { Auth } from 'src/common/auth.decorator';
 
 @ApiTags('modulo Unidades')
-@Auth()
 @Controller('units')
 export class SistemaUnidadRegController {
   constructor(
     private readonly sistemaUnidadRegService: SistemaUnidadRegService,
   ) {}
 
+  @Auth()
   @Post()
   create(@Body() createSistemaUnidadRegDto: CreateSistemaUnidadRegDto) {
     return this.sistemaUnidadRegService.create(createSistemaUnidadRegDto);
@@ -31,14 +31,16 @@ export class SistemaUnidadRegController {
     return this.sistemaUnidadRegService.findAll();
   }
 
+  @Auth()
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.sistemaUnidadRegService.findOne(id);
   }
 
+  @Auth()
   @Put(':id')
   editRecord(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateSistemaUnidadRegDto: UpdateSistemaUnidadRegDto,
   ) {
     return this.sistemaUnidadRegService.editRecord(
@@ -47,8 +49,9 @@ export class SistemaUnidadRegController {
     );
   }
 
+  @Auth()
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.sistemaUnidadRegService.remove(id);
   }
 }

@@ -30,20 +30,20 @@ export class SistemaTipSalController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.sistemaTipSalService.findOne(id);
   }
 
   @Put(':id')
   editRecord(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateSistemaTipSalDto: UpdateSistemaTipSalDto,
   ) {
     return this.sistemaTipSalService.editRecord(id, updateSistemaTipSalDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.sistemaTipSalService.remove(id);
   }
 }

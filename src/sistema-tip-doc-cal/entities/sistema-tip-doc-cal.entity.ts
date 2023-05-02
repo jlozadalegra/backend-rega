@@ -1,9 +1,20 @@
 import { SistemaReg } from 'src/sistema-reg';
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 
+@Unique('doccal_uq', ['Desc_docu'])
 @Entity('sistema_tipdocumcal')
 export class SistemaTipDocCal {
-  @PrimaryColumn({ type: 'varchar', length: 4 })
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ type: 'varchar', length: 4, default: '' })
   Co_docu: string;
 
   @Column({ type: 'varchar', length: 50 })

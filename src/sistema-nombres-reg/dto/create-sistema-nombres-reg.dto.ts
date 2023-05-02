@@ -1,19 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsString } from 'class-validator';
 import { aut_NC_ENUM } from '../entities/sistema-nombres-reg.enum';
+import { SistemaUnidadReg } from 'src/sistema-unidad-reg';
 
 export class CreateSistemaNombresRegDto {
   @ApiProperty()
-  @IsString()
-  Co_usuario: string;
-
-  @ApiProperty()
-  @IsString()
-  Num_unidad_reg: string;
-
-  @ApiProperty()
-  @IsString()
-  identificador: string;
+  @IsNumber()
+  Num_unidad_reg: SistemaUnidadReg;
 
   @ApiProperty()
   @IsString()

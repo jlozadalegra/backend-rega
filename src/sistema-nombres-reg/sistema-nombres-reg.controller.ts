@@ -10,23 +10,15 @@ import {
 import { SistemaNombresRegService } from './sistema-nombres-reg.service';
 import { CreateSistemaNombresRegDto } from './dto/create-sistema-nombres-reg.dto';
 import { UpdateSistemaNombresRegDto } from './dto/update-sistema-nombres-reg.dto';
-import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { Auth } from 'src/common/auth.decorator';
 
 @ApiTags('Control de usuarios')
-@Auth()
 @Controller('users')
 export class SistemaNombresRegController {
   constructor(
     private readonly sistemaNombresRegService: SistemaNombresRegService,
   ) {}
-  
-  @Post()
-  async create(@Body() createSistemaNombresRegDto: CreateSistemaNombresRegDto) {
-    return await this.sistemaNombresRegService.create(
-      createSistemaNombresRegDto,
-    );
-  }
 
   @Get()
   findAll() {
@@ -38,14 +30,24 @@ export class SistemaNombresRegController {
     return await this.sistemaNombresRegService.findAllNumUnidad(num);
   }
 
+  @Auth()
+  @Post()
+  async create(@Body() createSistemaNombresRegDto: CreateSistemaNombresRegDto) {
+    return await this.sistemaNombresRegService.create(
+      createSistemaNombresRegDto,
+    );
+  }
+
+  @Auth()
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.sistemaNombresRegService.findOne(id);
   }
 
+  @Auth()
   @Put(':id')
   editRecord(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateSistemaNombresRegDto: UpdateSistemaNombresRegDto,
   ) {
     return this.sistemaNombresRegService.editRecord(
@@ -54,13 +56,9 @@ export class SistemaNombresRegController {
     );
   }
 
+  @Auth()
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.sistemaNombresRegService.remove(id);
-  }
-
-  @Post('login')
-  login(@Body('usuario') usuario: string, @Body('password') password: string) {
-    return this.sistemaNombresRegService.login(usuario, password);
   }
 }

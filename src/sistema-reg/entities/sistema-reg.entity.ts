@@ -5,11 +5,14 @@ import { SistemaTipSal } from 'src/sistema-tip-sal/entities/sistema-tip-sal.enti
 import { SistemaUnidadReg } from 'src/sistema-unidad-reg';
 import {
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   Unique,
+  UpdateDateColumn,
 } from 'typeorm';
 import { ENT_SAL_ENUM } from './sistema-reg.enum';
 
@@ -29,6 +32,10 @@ export class SistemaReg {
   @ManyToOne(
     () => SistemaNombresReg,
     (sistemanombresReg) => sistemanombresReg.sistemareg,
+    {
+      onDelete: 'RESTRICT',
+      onUpdate: 'CASCADE',
+    },
   )
   @JoinColumn({ name: 'Co_nombre' })
   Co_nombre: SistemaNombresReg;
@@ -51,6 +58,10 @@ export class SistemaReg {
   @ManyToOne(
     () => SistemaTipDocCal,
     (sistemaTipDocCal) => sistemaTipDocCal.sistemareg,
+    {
+      onDelete: 'RESTRICT',
+      onUpdate: 'CASCADE',
+    },
   )
   @JoinColumn({ name: 'Co_tdoc' })
   Co_tdoc: SistemaTipDocCal;
@@ -58,7 +69,7 @@ export class SistemaReg {
   @Column({ type: 'int', width: 20 })
   num_reg: number;
 
-  @Column({ type: 'varchar', length: 50 })
+  @Column({ type: 'varchar', length: 50, default: '' })
   aclar_adic: string;
 
   @Column({ type: 'date', default: '0000-00-00' })
@@ -71,6 +82,10 @@ export class SistemaReg {
   @ManyToOne(
     () => SistemaProcDest,
     (sistemaProcDest) => sistemaProcDest.sistemareg,
+    {
+      onDelete: 'RESTRICT',
+      onUpdate: 'CASCADE',
+    },
   )
   @JoinColumn({ name: 'Co_pdest' })
   Co_pdest: SistemaProcDest;
@@ -88,4 +103,13 @@ export class SistemaReg {
 
   @Column({ type: 'varchar', length: 4, default: 'R' })
   repartir: string;
+
+  @CreateDateColumn()
+  createdDate: Date;
+
+  @UpdateDateColumn()
+  updatedDate: Date;
+
+  @DeleteDateColumn()
+  deletedDate: Date;
 }

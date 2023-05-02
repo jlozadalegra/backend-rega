@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { AppDataSource } from 'src/data-source';
 import { CreateSistemaNombresRegDto } from './dto/create-sistema-nombres-reg.dto';
 import { UpdateSistemaNombresRegDto } from './dto/update-sistema-nombres-reg.dto';
@@ -9,12 +14,7 @@ import * as bcrypt from 'bcrypt';
 export class SistemaNombresRegService {
   private NombresRegRepo = AppDataSource.getRepository(SistemaNombresReg);
 
-  async create(
-    newrecord: CreateSistemaNombresRegDto,
-  ): Promise<SistemaNombresReg> {
-    return await this.NombresRegRepo.save(newrecord);
-  }
-
+  //Obtener todos los usuarios----------------------------------------
   async findAll() {
     const found = await this.NombresRegRepo.find();
 
@@ -23,15 +23,25 @@ export class SistemaNombresRegService {
     }
 
     return {
-      statuscode: HttpStatus.OK,
+      statusCode: HttpStatus.OK,
       message: 'OK',
       data: found,
     };
   }
 
+  //Obtener Todos los usuarios de una unidad----------------------------------
   async findAllNumUnidad(num: string) {
+    console.log('esto es una prueba', num);
     const found = await this.NombresRegRepo.find({
-      where: { Num_unidad_reg: num },
+      relations: {
+        Num_unidad_reg: true,
+      },
+      where: { 
+        Num_unidad_reg: {id: num as any}
+      },
+      order: {
+        datosgenerales: 'ASC',
+      },
     });
 
     if (!found.length) {
@@ -39,29 +49,51 @@ export class SistemaNombresRegService {
     }
 
     return {
-      statuscode: HttpStatus.OK,
+      statusCode: HttpStatus.OK,
       message: 'OK',
       data: found,
     };
   }
 
-  //Buscar un único registro en la tabla
-  async findOne(id: string) {
+  //Insertar reistros----------------------------------------------------------------------
+  async create(
+    newrecord: CreateSistemaNombresRegDto,
+  ): Promise<SistemaNombresReg | any> {
+    if (newrecord.passnreg) {
+      const saltOrRounds = 12;
+      newrecord.passnreg = await bcrypt.hash(newrecord.passnreg, saltOrRounds);
+    }
+
+    const result = await this.NombresRegRepo.save(newrecord);
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'OK',
+      data: result,
+    };
+  }
+
+  //Buscar un único registro en la tabla---------------------------------------------------
+  async findOne(id: number) {
     const user = await this.NombresRegRepo.findOne({
-      where: { Co_usuario: id },
+      where: { id: id },
+      relations: {
+        Num_unidad_reg: true,
+      },
     });
 
     if (user == null) throw new NotFoundException('Usuario no encontrado');
-    
+
     return {
-      statuscode: HttpStatus.OK,
+      statusCode: HttpStatus.OK,
       message: 'OK',
       data: user,
     };
   }
 
-  async editRecord(id: string, update: UpdateSistemaNombresRegDto) {
-    const found = await this.NombresRegRepo.findOneBy({ Co_usuario: id });
+  //Actualizar registros-------------------------------------------------------------------
+  async editRecord(id: number, update: UpdateSistemaNombresRegDto) {
+    const found = await this.NombresRegRepo.findOneBy({ id: id });
 
     if (found == null)
       throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
@@ -74,51 +106,27 @@ export class SistemaNombresRegService {
     await this.NombresRegRepo.update(id, update);
 
     const modified = await this.NombresRegRepo.findOne({
-      where: { Co_usuario: id },
+      where: { id: id },
     });
 
     return {
-      statuscode: HttpStatus.OK,
+      statusCode: HttpStatus.OK,
       message: 'OK',
       data: modified,
     };
   }
 
-  async remove(id: string) {
-    const found = await this.NombresRegRepo.findOneBy({ Co_usuario: id });
+  //Eliminar registros--------------------------------------------------------------------
+  async remove(id: number) {
+    const found = await this.NombresRegRepo.findOneBy({ id: id });
 
     if (found == null)
       throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
 
     return {
-      statuscode: HttpStatus.OK,
-      message: 'OK',
-      data: await this.NombresRegRepo.remove(found),
-    };
-  }
-
-  async login(nombre: string, password: string) {
-    const usuario = await this.NombresRegRepo.findOne({
-      where: { Co_usuario: nombre },
-    });
-
-    if (!usuario) {
-      throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
-    }
-
-    const passwordcomp = await bcrypt.compare(password, usuario.passnreg);
-
-    if (!passwordcomp) {
-      throw new HttpException(
-        'Contraseña incorrecta',
-        HttpStatus.NOT_ACCEPTABLE,
-      );
-    }
-
-    return {
       statusCode: HttpStatus.OK,
       message: 'OK',
-      data: usuario,
+      data: await this.NombresRegRepo.remove(found),
     };
   }
 }

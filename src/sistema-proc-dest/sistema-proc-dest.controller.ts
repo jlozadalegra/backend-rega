@@ -31,20 +31,20 @@ export class SistemaProcDestController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.sistemaProcDestService.findOne(id);
   }
 
   @Put(':id')
   editRecord(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateSistemaProcDestDto: UpdateSistemaProcDestDto,
   ) {
     return this.sistemaProcDestService.editRecord(id, updateSistemaProcDestDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.sistemaProcDestService.remove(id);
   }
 }

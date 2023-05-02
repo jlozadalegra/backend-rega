@@ -6,6 +6,8 @@ import { SistemaTipDocCalModule } from './sistema-tip-doc-cal/sistema-tip-doc-ca
 import { SistemaTipSalModule } from './sistema-tip-sal/sistema-tip-sal.module';
 import { SistemaUnidadRegModule } from './sistema-unidad-reg/sistema-unidad-reg.module';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [        
@@ -15,7 +17,9 @@ import { AuthModule } from './auth/auth.module';
     SistemaTipDocCalModule,
     SistemaTipSalModule,
     SistemaUnidadRegModule,
-    AuthModule,    
+    AuthModule,  
+    UploadModule,
+    ConfigModule.forRoot({ isGlobal: true }),              
   ],
   controllers: [],
   providers: [],
