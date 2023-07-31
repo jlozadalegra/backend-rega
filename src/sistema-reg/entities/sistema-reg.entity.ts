@@ -6,7 +6,6 @@ import { SistemaUnidadReg } from 'src/sistema-unidad-reg';
 import {
   Column,
   CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -104,12 +103,12 @@ export class SistemaReg {
   @Column({ type: 'varchar', length: 4, default: 'R' })
   repartir: string;
 
+  @Column({ type: 'varchar', length: 200, default: '' })
+  file: string;
+
   @CreateDateColumn()
   createdDate: Date;
 
   @UpdateDateColumn()
   updatedDate: Date;
-
-  @DeleteDateColumn()
-  deletedDate: Date;
 }

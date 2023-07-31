@@ -14,15 +14,16 @@ import { UpdateSistemaRegDto } from './dto/update-sistema-reg.dto';
 import { ParseIntPipe } from '@nestjs/common/pipes';
 import { ApiTags } from '@nestjs/swagger';
 import { Auth } from 'src/common/auth.decorator';
+import { SistemaUnidadReg } from 'src/sistema-unidad-reg';
 
 @ApiTags("Modulo del Rega")
 //@Auth()
 @Controller('sistemareg')
 export class SistemaRegController {
-  constructor(private readonly sistemaRegService: SistemaRegService) {}
+  constructor(private readonly sistemaRegService: SistemaRegService) { }
 
   @Get('rows')
-  _get(){
+  _get() {
     return this.sistemaRegService._get();
   }
 
@@ -37,15 +38,23 @@ export class SistemaRegController {
     return this.sistemaRegService.create(createSistemaRegDto);
   }
 
+  @Get('cons/:unit/:year')
+  consecutivo(
+    @Param('unit') unit: string,
+    @Param('year') year: string
+  ) {    
+    return this.sistemaRegService.consecutivo(unit as any, year);
+  }
+
   @Auth()
   @Get()
   findAll() {
     return this.sistemaRegService.findAll();
   }
 
-  @Auth() 
+  @Auth()
   @Get('unit/:num')
-  findAllNumUnidad(@Param('num') num: string) {    
+  findAllNumUnidad(@Param('num') num: string) {
     return this.sistemaRegService.findAllNumUnidad(num);
   }
 

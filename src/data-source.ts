@@ -7,6 +7,7 @@ import { SistemaTipSal } from './sistema-tip-sal/entities/sistema-tip-sal.entity
 import { SistemaUnidadReg } from './sistema-unidad-reg';
 
 import 'dotenv/config'; 
+import { ParseBoolPipe } from '@nestjs/common';
 
 export const AppDataSource = new DataSource({
   type: process.env.TYPEORM_CONNECTION as any,

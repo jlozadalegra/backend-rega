@@ -39,9 +39,9 @@ export class SistemaNombresRegController {
   }
 
   @Auth()
-  @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.sistemaNombresRegService.findOne(id);
+  @Get(':identf')
+  findOne(@Param('identf') identf: string) {
+    return this.sistemaNombresRegService.findOne(identf);
   }
 
   @Auth()

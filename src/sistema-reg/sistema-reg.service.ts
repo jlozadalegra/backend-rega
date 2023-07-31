@@ -51,13 +51,12 @@ export class SistemaRegService {
     //num_reg
     const NumUnidad = createSistemaRegDto.Num_unidad_reg;
     const year = createSistemaRegDto.year;
-    const entsal = createSistemaRegDto.ent_sal;
-    const repartir = createSistemaRegDto.repartir;
+    //const repartir = createSistemaRegDto.repartir;
 
-    const numreg = await this.consecutivo(NumUnidad, year, entsal, repartir);
+    //const numreg = await this.consecutivo(NumUnidad, year);
 
     const registro = await this.SistemaRegRepo.create(createSistemaRegDto);
-    registro.num_reg = numreg;
+    //registro.num_reg = numreg;
 
     const resul = await this.SistemaRegRepo.save(registro);
 
@@ -69,8 +68,8 @@ export class SistemaRegService {
   }
 
   //Obtener todos los registros------------------------------------------------------------
-  findAll() {
-    return this.SistemaRegRepo.find({
+  async findAll() {
+    const found = await this.SistemaRegRepo.find({
       relations: {
         Co_nombre: true,
         Co_tdoc: true,
@@ -82,6 +81,19 @@ export class SistemaRegService {
         Co_reg: 'DESC',
       },
     });
+
+    if (!found.length) {
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'Registros no encontrados',
+      };
+    }
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'OK',
+      data: found,
+    };
   }
 
   //Obtener todos los registros de una unidad----------------------------------------------
@@ -101,7 +113,10 @@ export class SistemaRegService {
     });
 
     if (!found.length) {
-      throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'Registros no encontrados',
+      };
     }
 
     return {
@@ -112,18 +127,11 @@ export class SistemaRegService {
   }
 
   //Función para Obtener el consecutivo del REGA--------------------------------------------
-  async consecutivo(
-    NumUnidad: SistemaUnidadReg,
-    year: string,
-    entsal: string,
-    repartir: string,
-  ) {
+  async consecutivo(NumUnidad: SistemaUnidadReg, year: string) {
     const maxi = await this.SistemaRegRepo.createQueryBuilder('reg')
       .select('MAX(reg.num_reg)', 'max')
       .where('reg.Num_unidad_reg = :NumUnidad', { NumUnidad })
       .andWhere('reg.year = :year', { year })
-      .andWhere('reg.ent_sal = :entsal', { entsal })
-      .andWhere('reg.repartir = :repartir', { repartir })
       .getRawOne();
 
     return maxi.max + 1;
@@ -158,9 +166,6 @@ export class SistemaRegService {
 
     if (found == null)
       throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
-      
-      console.log("Rorber", update);
-
 
     await this.SistemaRegRepo.update(id, update);
 

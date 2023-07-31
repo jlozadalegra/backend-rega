@@ -26,6 +26,11 @@ export class SistemaUnidadRegController {
     return this.sistemaUnidadRegService.create(createSistemaUnidadRegDto);
   }
 
+  @Get('login')
+  findLogin() {
+    return this.sistemaUnidadRegService.findLogin();
+  }
+
   @Get()
   findAll() {
     return this.sistemaUnidadRegService.findAll();

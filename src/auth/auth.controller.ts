@@ -10,7 +10,8 @@ export class AuthController {
 
   @Post('login')
   async validateUser(@Body() authDto: AuthDto) {
-    return await this.authService.validateUser(authDto);
+    const resul = await this.authService.validateUser(authDto);    
+    return resul; //await this.authService.validateUser(authDto);
   }
 
   

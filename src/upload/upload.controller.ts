@@ -1,11 +1,19 @@
 import {
   Controller,
+  Get,
+  HttpStatus,
+  Param,
   Post,
+  Res,
+  StreamableFile,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { createReadStream } from 'fs';
 import { diskStorage } from 'multer';
+import { join } from 'path';
+import { Observable, of } from 'rxjs';
 
 @Controller()
 export class UploadController {
@@ -14,12 +22,12 @@ export class UploadController {
     FileInterceptor('file', {
       storage: diskStorage({
         destination: './uploads',
-        filename: function (rep, file, cb) {
+        filename: function (req, file, cb) {
           cb(null, file.originalname);
         },
       }),
-      fileFilter: function (rep, file, cb) {
-        if (!file.originalname.match(/\.(pdf)$/)) {
+      fileFilter: function (req, file, cb) {
+        if (!file.originalname.match(/\.(pdf|doc|docx|dot)$/)) {
           return cb(new Error('Formato de archivo invalido'), false);
         }
         cb(null, true);
@@ -27,6 +35,22 @@ export class UploadController {
     }),
   )
   uploadFile(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
+    return {
+      statusCode: HttpStatus.OK,
+      message: `Archivo ${file.originalname} subido exitosamente`,
+      data: file.originalname,
+    };
+  }
+
+  @Get('download/:filename')
+  downloadFile(@Param('filename') filename, @Res() res): Observable<Object> {
+    return of(res.sendFile(join(process.cwd(), './uploads/' + filename)));
+  }
+
+  @Get('file/:filename')
+  getFile(@Param('filename') filename): StreamableFile {
+    const file = createReadStream(join(process.cwd(), './uploads/' + filename));
+
+    return new StreamableFile(file);
   }
 }

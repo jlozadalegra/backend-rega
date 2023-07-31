@@ -21,10 +21,24 @@ export class AuthService {
 
   async validateUser(authDto: AuthDto) {
     const user = await this.userService.findOne(authDto.usuario);
-    if (!user) throw new NotFoundException('Usuario no encontrado');
 
+    //Si el usuario no existe
+    if (!user.data) {
+      return user;
+      //throw new NotFoundException('Usuario no encontrado');
+    }
+
+    //Validar contraseña
     const valid = await bcrypt.compare(authDto.password, user.data.passnreg);
-    if (!valid) throw new UnauthorizedException('Contraseña incorrecta');
+    //si la contraseña es incorrecta
+    if (!valid) {
+      return {
+        statusCode: HttpStatus.CONFLICT,
+        message: 'Constraseña Incorrecta',
+        data: valid,
+      };
+      //throw new UnauthorizedException('Contraseña incorrecta');
+    }
 
     const token = this.generateAccessToken(
       String(user.data.id),
@@ -39,6 +53,7 @@ export class AuthService {
         usuario: user.data.datosgenerales,
         admin: user.data.aut_NC[0],
         idUnidad: user.data.Num_unidad_reg.id,
+        keyUnidad: user.data.Num_unidad_reg.Num_unidad_reg,
         unidad: user.data.Num_unidad_reg.descripcionureg,
         accessToken: token.accessToken,
       },

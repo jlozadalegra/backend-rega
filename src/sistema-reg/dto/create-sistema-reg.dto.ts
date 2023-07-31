@@ -47,9 +47,15 @@ export class CreateSistemaRegDto {
   @IsNumber()
   numejemp: number;
 
+  @IsNumber()
+  num_reg: number;
+
   @IsString()
   year: string;
 
   @IsString()
   repartir: string;
+
+  @IsString()
+  file: string;
 }

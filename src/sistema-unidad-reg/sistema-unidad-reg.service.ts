@@ -3,6 +3,7 @@ import { AppDataSource } from 'src/data-source';
 import { CreateSistemaUnidadRegDto } from './dto/create-sistema-unidad-reg.dto';
 import { UpdateSistemaUnidadRegDto } from './dto/update-sistema-unidad-reg.dto';
 import { SistemaUnidadReg } from './entities/sistema-unidad-reg.entity';
+import { Not } from 'typeorm';
 
 @Injectable()
 export class SistemaUnidadRegService {
@@ -19,9 +20,32 @@ export class SistemaUnidadRegService {
     };
   }
 
+  //Obtener todos los registros para el login-----------------------------------------------------------
+  async findLogin() {
+    const found = await this.UnidadRegRepo.find({
+      order: {
+        descripcionureg: 'ASC',
+      },
+    });
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'OK',
+      data: found,
+    };
+  }
+
   //Obtener todos los registros-----------------------------------------------------------
   async findAll() {
-    const found = await this.UnidadRegRepo.find();
+    const found = await this.UnidadRegRepo.find({
+      where: {
+        descripcionureg: Not('Administración'),
+      },
+      order: {
+        descripcionureg: 'ASC',
+      },
+    });
+
     return {
       statusCode: HttpStatus.OK,
       message: 'OK',

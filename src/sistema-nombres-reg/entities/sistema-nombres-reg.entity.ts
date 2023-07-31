@@ -36,6 +36,13 @@ export class SistemaNombresReg {
   })
   aut_NC: aut_NC_ENUM; //enum SI y NO
 
+  @Column({
+    type: 'set',
+    enum: aut_NC_ENUM,
+    default: aut_NC_ENUM.NO,
+  })
+  deleted: aut_NC_ENUM; //enum SI y NO
+
   @Column({ type: 'varchar', length: 60 })
   passnreg: string;
 

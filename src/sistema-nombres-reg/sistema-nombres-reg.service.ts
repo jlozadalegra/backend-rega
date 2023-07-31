@@ -9,6 +9,8 @@ import { CreateSistemaNombresRegDto } from './dto/create-sistema-nombres-reg.dto
 import { UpdateSistemaNombresRegDto } from './dto/update-sistema-nombres-reg.dto';
 import { SistemaNombresReg } from './entities/sistema-nombres-reg.entity';
 import * as bcrypt from 'bcrypt';
+import { Not } from 'typeorm';
+import { aut_NC_ENUM } from './entities/sistema-nombres-reg.enum';
 
 @Injectable()
 export class SistemaNombresRegService {
@@ -16,10 +18,23 @@ export class SistemaNombresRegService {
 
   //Obtener todos los usuarios----------------------------------------
   async findAll() {
-    const found = await this.NombresRegRepo.find();
+    const found = await this.NombresRegRepo.find({
+      relations: {
+        Num_unidad_reg: true,
+      },
+      where: {
+        identificador: Not('Administrador'),
+      },
+      order: {
+        datosgenerales: 'ASC',
+      },
+    });
 
     if (!found.length) {
-      throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'Registros no encontrados',
+      };
     }
 
     return {
@@ -31,13 +46,13 @@ export class SistemaNombresRegService {
 
   //Obtener Todos los usuarios de una unidad----------------------------------
   async findAllNumUnidad(num: string) {
-    console.log('esto es una prueba', num);
     const found = await this.NombresRegRepo.find({
       relations: {
         Num_unidad_reg: true,
       },
-      where: { 
-        Num_unidad_reg: {id: num as any}
+      where: {
+        Num_unidad_reg: { id: num as any },
+        deleted: Not(aut_NC_ENUM.SI),
       },
       order: {
         datosgenerales: 'ASC',
@@ -45,7 +60,10 @@ export class SistemaNombresRegService {
     });
 
     if (!found.length) {
-      throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'Registros no encontrados',
+      };
     }
 
     return {
@@ -64,6 +82,19 @@ export class SistemaNombresRegService {
       newrecord.passnreg = await bcrypt.hash(newrecord.passnreg, saltOrRounds);
     }
 
+    //Validar que el identificador de usuario no este repetido
+    const validateuser = await this.NombresRegRepo.findOne({
+      where: { identificador: newrecord.identificador },
+    });
+
+    if (validateuser !== null) {
+      return {
+        statusCode: HttpStatus.CONFLICT,
+        message: 'El usuario ya existe en la Base de Datos',
+        data: newrecord,
+      };
+    }
+
     const result = await this.NombresRegRepo.save(newrecord);
 
     return {
@@ -74,15 +105,23 @@ export class SistemaNombresRegService {
   }
 
   //Buscar un único registro en la tabla---------------------------------------------------
-  async findOne(id: number) {
+  async findOne(identf: string) {
     const user = await this.NombresRegRepo.findOne({
-      where: { id: id },
+      where: { identificador: identf },
       relations: {
         Num_unidad_reg: true,
       },
     });
 
-    if (user == null) throw new NotFoundException('Usuario no encontrado');
+    if (user === null) {
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'Nombre de usuario incorrecto',
+        data: user,
+      };
+      
+      //throw new NotFoundException('Usuario no encontrado');
+    }
 
     return {
       statusCode: HttpStatus.OK,

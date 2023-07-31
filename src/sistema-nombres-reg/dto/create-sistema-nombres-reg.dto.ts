@@ -14,9 +14,17 @@ export class CreateSistemaNombresRegDto {
 
   @ApiProperty()
   @IsString()
+  identificador: string;
+
+  @ApiProperty()
+  @IsString()
   datosgenerales: string;
 
   @ApiProperty()
   @IsEnum(aut_NC_ENUM)
   aut_NC: aut_NC_ENUM; //enum SI y NO
+
+  @ApiProperty()
+  @IsEnum(aut_NC_ENUM)
+  deleted: aut_NC_ENUM; //enum SI y NO
 }

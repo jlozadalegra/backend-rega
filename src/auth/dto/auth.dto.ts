@@ -3,8 +3,8 @@ import { IsString, IsNumber } from "class-validator";
 
 export class AuthDto {
     @ApiProperty()
-    @IsNumber()
-    usuario: number;
+    @IsString()
+    usuario: string;
 
     @ApiProperty()
     @IsString()

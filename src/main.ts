@@ -23,7 +23,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('API Rega')
-    .setDescription('Control de Registros e Almest')
+    .setDescription('Control de Registros Almest')
     .setVersion('1.0')
     .addBearerAuth()
     .addTag('Rega')
