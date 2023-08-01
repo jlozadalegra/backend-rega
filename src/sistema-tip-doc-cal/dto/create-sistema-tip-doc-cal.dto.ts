@@ -5,5 +5,5 @@ export class CreateSistemaTipDocCalDto {
   Co_docu: string;
 
   @IsString()
-  Desc_docu: string;
+  desc_docu: string;
 }

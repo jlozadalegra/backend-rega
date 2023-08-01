@@ -7,7 +7,7 @@ import {
   Unique,
 } from 'typeorm';
 
-@Unique('tipsal_uq', ['Desc_tipsal'])
+@Unique('tipsal_uq', ['desc_tipsal'])
 @Entity('sistema_tipsal')
 export class SistemaTipSal {
   @PrimaryGeneratedColumn()
@@ -17,7 +17,7 @@ export class SistemaTipSal {
   Co_tipsal: string;
 
   @Column({ type: 'varchar', length: 25 })
-  Desc_tipsal: string;
+  desc_tipsal: string;
 
   @OneToMany((type) => SistemaReg, (sistemaReg) => sistemaReg.Co_tipsal)
   sistemareg: SistemaReg[];

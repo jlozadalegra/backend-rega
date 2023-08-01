@@ -7,7 +7,10 @@ import { SistemaTipSal } from './sistema-tip-sal/entities/sistema-tip-sal.entity
 import { SistemaUnidadReg } from './sistema-unidad-reg';
 
 import 'dotenv/config'; 
-import { ParseBoolPipe } from '@nestjs/common';
+
+import { cargos } from './cargos/entities/cargos.entity';
+import { especialidades } from './especialidades/entities/especialidades.entity';
+import { areas } from './areas/entities/areas.entity';
 
 export const AppDataSource = new DataSource({
   type: process.env.TYPEORM_CONNECTION as any,
@@ -16,7 +19,7 @@ export const AppDataSource = new DataSource({
   username: process.env.TYPEORM_USERNAME,
   password: process.env.TYPEORM_PASSWORD,
   database: process.env.TYPEORM_DATABASE,
-  synchronize: false,
+  synchronize: true,
   logging: true,
   entities: [
     SistemaReg,
@@ -25,5 +28,8 @@ export const AppDataSource = new DataSource({
     SistemaTipDocCal,
     SistemaTipSal,
     SistemaUnidadReg,
+    cargos,
+    especialidades,
+    areas
   ]    
 });

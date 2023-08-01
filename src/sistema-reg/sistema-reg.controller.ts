@@ -42,7 +42,9 @@ export class SistemaRegController {
   consecutivo(
     @Param('unit') unit: string,
     @Param('year') year: string
-  ) {    
+  ) {
+    console.warn('unidad', unit);
+    console.warn('año', year);
     return this.sistemaRegService.consecutivo(unit as any, year);
   }
 

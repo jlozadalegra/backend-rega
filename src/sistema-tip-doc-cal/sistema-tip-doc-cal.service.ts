@@ -25,7 +25,7 @@ export class SistemaTipDocCalService {
   async findAll() {
     const found = await this.TipDocCalRepo.find({
       order:{
-        Desc_docu: 'ASC'
+        desc_docu: 'ASC'
       }
     });
 

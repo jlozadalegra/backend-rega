@@ -50,7 +50,7 @@ export class UploadController {
   @Get('file/:filename')
   getFile(@Param('filename') filename): StreamableFile {
     const file = createReadStream(join(process.cwd(), './uploads/' + filename));
-
+    console.log('file', file);
     return new StreamableFile(file);
   }
 }

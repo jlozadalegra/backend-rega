@@ -167,6 +167,8 @@ export class SistemaRegService {
     if (found == null)
       throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
 
+    console.log('Rorber', update);
+
     await this.SistemaRegRepo.update(id, update);
 
     const modified = await this.SistemaRegRepo.findOne({

@@ -8,7 +8,7 @@ import {
   Unique,
 } from 'typeorm';
 
-@Unique('doccal_uq', ['Desc_docu'])
+@Unique('doccal_uq', ['desc_docu'])
 @Entity('sistema_tipdocumcal')
 export class SistemaTipDocCal {
   @PrimaryGeneratedColumn()
@@ -18,7 +18,7 @@ export class SistemaTipDocCal {
   Co_docu: string;
 
   @Column({ type: 'varchar', length: 50 })
-  Desc_docu: string;
+  desc_docu: string;
 
   @OneToMany(() => SistemaReg, (sistemaReg) => sistemaReg.Co_tdoc)
   sistemareg: SistemaReg[];

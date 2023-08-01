@@ -71,7 +71,7 @@ export class SistemaReg {
   @Column({ type: 'varchar', length: 50, default: '' })
   aclar_adic: string;
 
-  @Column({ type: 'date', default: '0000-00-00' })
+  @Column({ type: 'date', default: () => 'CURRENT_DATE' })
   fecha: Date;
 
   @Column({ type: 'varchar', length: 200 })

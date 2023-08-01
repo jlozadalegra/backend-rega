@@ -9,7 +9,9 @@ export class SistemaProcDestService {
   private ProcDestRepo = AppDataSource.getRepository(SistemaProcDest);
 
   //Insertar registros--------------------------------------------------------------------
-  async create(newrecord: CreateSistemaProcDestDto): Promise<SistemaProcDest | any> {
+  async create(
+    newrecord: CreateSistemaProcDestDto,
+  ): Promise<SistemaProcDest | any> {
     const response = await this.ProcDestRepo.save(newrecord);
 
     return {
@@ -22,9 +24,9 @@ export class SistemaProcDestService {
   //Buscar todos los registros-------------------------------------------------------------
   async findAll() {
     const found = await this.ProcDestRepo.find({
-      order:{
-        descripcionpdest: 'ASC'
-      }
+      order: {
+        descripcionpdest: 'ASC',
+      },
     });
 
     if (!found.length) {
@@ -58,8 +60,13 @@ export class SistemaProcDestService {
   async editRecord(id: number, update: UpdateSistemaProcDestDto) {
     const found = await this.ProcDestRepo.findOneBy({ id: id });
 
-    if (found == null)
-      throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+    if (found === null) {
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'Destino Incorrecto',
+        data: found,
+      };
+    }
 
     await this.ProcDestRepo.update(id, update);
 
@@ -76,7 +83,7 @@ export class SistemaProcDestService {
       data: modified,
     };
   }
-  
+
   //Eliminar registros---------------------------------------------------------------
   async remove(id: number) {
     const found = await this.ProcDestRepo.findOneBy({ id: id });
