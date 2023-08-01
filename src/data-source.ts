@@ -6,7 +6,7 @@ import { SistemaTipDocCal } from './sistema-tip-doc-cal';
 import { SistemaTipSal } from './sistema-tip-sal/entities/sistema-tip-sal.entity';
 import { SistemaUnidadReg } from './sistema-unidad-reg';
 
-import 'dotenv/config'; 
+import 'dotenv/config';
 
 import { cargos } from './cargos/entities/cargos.entity';
 import { especialidades } from './especialidades/entities/especialidades.entity';
