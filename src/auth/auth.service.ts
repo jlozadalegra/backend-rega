@@ -33,11 +33,10 @@ export class AuthService {
     //si la contraseña es incorrecta
     if (!valid) {
       return {
-        statusCode: HttpStatus.CONFLICT,
+        statusCode: HttpStatus.NOT_ACCEPTABLE,
         message: 'Constraseña Incorrecta',
         data: valid,
       };
-      //throw new UnauthorizedException('Contraseña incorrecta');
     }
 
     const token = this.generateAccessToken(
@@ -51,7 +50,7 @@ export class AuthService {
       data: {
         idUsuario: user.data.id,
         usuario: user.data.datosgenerales,
-        admin: user.data.aut_NC[0],
+        admin: user.data.aut_NC,
         idUnidad: user.data.Num_unidad_reg.id,
         keyUnidad: user.data.Num_unidad_reg.Num_unidad_reg,
         unidad: user.data.Num_unidad_reg.descripcionureg,

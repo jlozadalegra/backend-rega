@@ -14,7 +14,6 @@ import { UpdateSistemaRegDto } from './dto/update-sistema-reg.dto';
 import { ParseIntPipe } from '@nestjs/common/pipes';
 import { ApiTags } from '@nestjs/swagger';
 import { Auth } from 'src/common/auth.decorator';
-import { SistemaUnidadReg } from 'src/sistema-unidad-reg';
 
 @ApiTags("Modulo del Rega")
 //@Auth()

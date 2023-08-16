@@ -10,8 +10,8 @@ import {
 
 @Entity('areas')
 export class areas {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
   @Column({ type: 'varchar', length: 60, default: '', unique: true })
   areas: string;
@@ -22,9 +22,9 @@ export class areas {
   )
   SistemaNombresReg: SistemaNombresReg[];
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp' })
   createdDate: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamp' })
   updatedDate: Date;
 }

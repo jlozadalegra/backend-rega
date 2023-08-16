@@ -46,6 +46,13 @@ export class SistemaUnidadRegService {
       },
     });
 
+    if (!found.length) {
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: 'Registros no encontrados 88',
+      };
+    }
+
     return {
       statusCode: HttpStatus.OK,
       message: 'OK',
