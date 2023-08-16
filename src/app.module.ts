@@ -8,6 +8,9 @@ import { SistemaUnidadRegModule } from './sistema-unidad-reg/sistema-unidad-reg.
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { UploadModule } from './upload/upload.module';
+import { AreasModule } from './areas';
+import { CargosModule } from './cargos';
+import { EspecialidadesModule } from './especialidades';
 
 @Module({
   imports: [        
@@ -17,6 +20,9 @@ import { UploadModule } from './upload/upload.module';
     SistemaTipDocCalModule,
     SistemaTipSalModule,
     SistemaUnidadRegModule,
+    AreasModule,   
+    CargosModule, 
+    EspecialidadesModule,
     AuthModule,  
     UploadModule,
     ConfigModule.forRoot({ isGlobal: true }),              

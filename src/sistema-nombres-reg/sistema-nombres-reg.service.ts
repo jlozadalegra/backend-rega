@@ -2,7 +2,6 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
-  NotFoundException,
 } from '@nestjs/common';
 import { AppDataSource } from 'src/data-source';
 import { CreateSistemaNombresRegDto } from './dto/create-sistema-nombres-reg.dto';
@@ -23,7 +22,7 @@ export class SistemaNombresRegService {
         Num_unidad_reg: true,
       },
       where: {
-        identificador: Not('Administrador'),
+        identificador: Not('administrador'),
       },
       order: {
         datosgenerales: 'ASC',
@@ -33,7 +32,7 @@ export class SistemaNombresRegService {
     if (!found.length) {
       return {
         statusCode: HttpStatus.NOT_FOUND,
-        message: 'Registros no encontrados',
+        message: 'Registros no encontrados7777',
       };
     }
 
@@ -62,7 +61,7 @@ export class SistemaNombresRegService {
     if (!found.length) {
       return {
         statusCode: HttpStatus.NOT_FOUND,
-        message: 'Registros no encontrados',
+        message: 'Registros no encontrados66',
       };
     }
 
