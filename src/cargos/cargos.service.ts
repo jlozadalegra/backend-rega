@@ -1,15 +1,17 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AppDataSource } from 'src/data-source';
-import { cargos } from './entities/cargos.entity';
+import { Cargos } from './entities/cargos.entity';
 import { CreateCargosDto } from './dto/create-cargos.dto';
 import { UpdateCargosDto } from './dto/update-cargos.dto';
 
 @Injectable()
 export class CargosService {
-  private CargosRepository = AppDataSource.getRepository(cargos);
+  private CargosRepository = AppDataSource.getRepository(Cargos);
 
   async findAll() {
-    const cargo = await this.CargosRepository.find();
+    const cargo = await this.CargosRepository.find({
+      order: { cargos: 'ASC' },
+    });
 
     if (cargo.length) {
       return {
@@ -25,9 +27,35 @@ export class CargosService {
     }
   }
 
+  async findOne(id: string) {
+    const cargo = await this.CargosRepository.findOne({
+      where: { id },
+    });
+
+    if (cargo) {
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'OK',
+        data: cargo,
+      };
+    } else {
+      throw new HttpException(
+        'Sin registros que mostrar',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
+
   async insert(body: CreateCargosDto) {
-    const cargo = this.CargosRepository.create(body);
-    await this.CargosRepository.save(cargo);
+    let cargo = {};
+    try {
+      cargo = this.CargosRepository.create(body);
+      await this.CargosRepository.save(cargo);
+    } catch (error) {
+      return error;
+      console.log('Error desde el servicio', error);
+    }
+
     return {
       statusCode: HttpStatus.OK,
       message: 'OK',
@@ -35,7 +63,7 @@ export class CargosService {
     };
   }
 
-  async update(id: number, body: UpdateCargosDto) {
+  async update(id: string, body: UpdateCargosDto) {
     const preloadCargo = {
       id,
       ...body,
@@ -51,13 +79,13 @@ export class CargosService {
       };
     } else {
       throw new HttpException(
-        `No se encuentra el cargo con id ${id}`,
+        `No se encuentra el registro con id ${id}`,
         HttpStatus.NOT_FOUND,
       );
     }
   }
 
-  async delete(id: number) {
+  async delete(id: string) {
     const cargo = await this.CargosRepository.findOne({ where: { id } });
 
     if (cargo) {
@@ -69,7 +97,7 @@ export class CargosService {
     }
 
     throw new HttpException(
-      `No se encuentra el cargo con id ${id}`,
+      `No se encuentra el área con id ${id}`,
       HttpStatus.NOT_FOUND,
     );
 

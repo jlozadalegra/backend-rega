@@ -1,17 +1,27 @@
-import { SistemaNombresReg } from "src/sistema-nombres-reg";
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Users } from 'src/users/entities/users.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('especialidades')
-export class especialidades {
-    @PrimaryGeneratedColumn()
-    id: number;
+export class Especialidades {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column({type: 'varchar', length: 60, default: ''})
-    especialidades: string;
+  @Column({ type: 'varchar', length: 60, default: '' })
+  especialidades: string;
 
-    @OneToMany(
-        () => SistemaNombresReg,
-        (SistemaNombresReg) => SistemaNombresReg.idespecialidad,
-      )
-      SistemaNombresReg: SistemaNombresReg[];
+  @OneToMany(() => Users, (users) => users.idespecialidad)
+  users: Users[];
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdDate: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedDate: Date;
 }

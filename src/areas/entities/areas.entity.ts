@@ -1,4 +1,4 @@
-import { SistemaNombresReg } from 'src/sistema-nombres-reg';
+import { Users } from 'src/users/entities/users.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -9,18 +9,15 @@ import {
 } from 'typeorm';
 
 @Entity('areas')
-export class areas {
-  @PrimaryGeneratedColumn("uuid")
+export class Areas {
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ type: 'varchar', length: 60, default: '', unique: true })
   areas: string;
 
-  @OneToMany(
-    () => SistemaNombresReg,
-    (SistemaNombresReg) => SistemaNombresReg.idarea,
-  )
-  SistemaNombresReg: SistemaNombresReg[];
+  @OneToMany(() => Users, (users) => users.idarea)
+  users: Users[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdDate: Date;

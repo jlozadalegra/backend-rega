@@ -5,6 +5,5 @@ import { CargosService } from './cargos.service';
 @Module({
   controllers: [CargosController],
   providers: [CargosService],
-  
 })
 export class CargosModule {}

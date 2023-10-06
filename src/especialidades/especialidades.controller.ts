@@ -11,10 +11,8 @@ import { EspecialidadesService } from './especialidades.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateEspecialidadesDto } from './dto/create-especialidades.dto';
 import { UpdateEspecialidadesDto } from './dto/update-especialidades.dto';
-import { ParseIntPipe } from '@nestjs/common/pipes';
-
 @ApiTags('Especialidades')
-@Controller('especialidades')
+@Controller('specialties')
 export class EspecialidadesController {
   constructor(private readonly especialidadesService: EspecialidadesService) {}
 
@@ -23,23 +21,32 @@ export class EspecialidadesController {
     return await this.especialidadesService.findAll();
   }
 
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return await this.especialidadesService.findOne(id);
+  }
+
   @Post()
   insert(@Body() body: CreateEspecialidadesDto) {
-    return this.especialidadesService.insert(body);
+    try {
+      return this.especialidadesService.insert(body);
+    } catch (error) {
+      return error;
+      console.log('Error desde el API', error);
+    }
   }
 
   @Put(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() body: UpdateEspecialidadesDto) {
+  update(@Param('id') id: string, @Body() body: UpdateEspecialidadesDto) {
     return this.especialidadesService.update(id, body);
   }
 
   @Delete(':id')
-  delete(@Param('id', ParseIntPipe) id: number) {
+  delete(@Param('id') id: string) {
     try {
-      return this.especialidadesService.delete(id);  
+      return this.especialidadesService.delete(id);
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
     }
-    
   }
 }

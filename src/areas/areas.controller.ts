@@ -23,9 +23,19 @@ export class AreasController {
     return await this.areasService.findAll();
   }
 
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return await this.areasService.findOne(id);
+  }
+
   @Post()
   insert(@Body() body: CreateAreasDto) {
-    return this.areasService.insert(body);
+    try {
+      return this.areasService.insert(body);
+    } catch (error) {
+      return error;
+      console.log('Error desde el API', error);
+    }
   }
 
   @Put(':id')
@@ -36,10 +46,9 @@ export class AreasController {
   @Delete(':id')
   delete(@Param('id') id: string) {
     try {
-      return this.areasService.delete(id);  
+      return this.areasService.delete(id);
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
     }
-    
   }
 }

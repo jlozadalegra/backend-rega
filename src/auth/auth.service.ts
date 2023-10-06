@@ -1,26 +1,24 @@
 import {
   Injectable,
-  UnauthorizedException,
-  NotFoundException,
   HttpStatus,
 } from '@nestjs/common';
-import { SistemaNombresRegService } from 'src/sistema-nombres-reg';
 
 import { AuthDto } from './dto';
 
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { JWTPayload } from './jwt.payload';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: SistemaNombresRegService,
+    private userService: UsersService,
     private jwtService: JwtService,
   ) {}
 
   async validateUser(authDto: AuthDto) {
-    const user = await this.userService.findOne(authDto.usuario);
+    const user = await this.userService.findByUser(authDto.usuario);
 
     //Si el usuario no existe
     if (!user.data) {
@@ -29,7 +27,8 @@ export class AuthService {
     }
 
     //Validar contraseña
-    const valid = await bcrypt.compare(authDto.password, user.data.passnreg);
+    const valid = await bcrypt.compare(authDto.password, user.data.password);
+
     //si la contraseña es incorrecta
     if (!valid) {
       return {
@@ -39,23 +38,15 @@ export class AuthService {
       };
     }
 
-    const token = this.generateAccessToken(
-      String(user.data.id),
-      user.data.datosgenerales,
-    );
+    const token = this.generateAccessToken(user.data.id, user.data.fullname);
+
+    //eliminar la contraseña
+    delete user.data.password;
 
     return {
       statusCode: HttpStatus.OK,
       message: 'Usuario Logueado',
-      data: {
-        idUsuario: user.data.id,
-        usuario: user.data.datosgenerales,
-        admin: user.data.aut_NC,
-        idUnidad: user.data.Num_unidad_reg.id,
-        keyUnidad: user.data.Num_unidad_reg.Num_unidad_reg,
-        unidad: user.data.Num_unidad_reg.descripcionureg,
-        accessToken: token.accessToken,
-      },
+      data: {...user.data, ...token}
     };
   }
 

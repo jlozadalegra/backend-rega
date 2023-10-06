@@ -10,24 +10,28 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiTags } from '@nestjs/swagger';
 import { createReadStream } from 'fs';
 import { diskStorage } from 'multer';
 import { join } from 'path';
 import { Observable, of } from 'rxjs';
 
+import 'dotenv/config';
+
+@ApiTags('Files')
 @Controller()
 export class UploadController {
   @Post('upload')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: './uploads',
+        destination: process.env.UPLOAD, //'./uploads',
         filename: function (req, file, cb) {
           cb(null, file.originalname);
         },
       }),
       fileFilter: function (req, file, cb) {
-        if (!file.originalname.match(/\.(pdf|doc|docx|dot)$/)) {
+        if (!file.originalname.match(/\.(pdf|doc|docx|dot|xls|xlsx|jpg)$/)) {
           return cb(new Error('Formato de archivo invalido'), false);
         }
         cb(null, true);
@@ -44,12 +48,12 @@ export class UploadController {
 
   @Get('download/:filename')
   downloadFile(@Param('filename') filename, @Res() res): Observable<Object> {
-    return of(res.sendFile(join(process.cwd(), './uploads/' + filename)));
+    return of(res.sendFile(join(process.cwd(), process.env.UPLOAD + filename)));
   }
 
   @Get('file/:filename')
   getFile(@Param('filename') filename): StreamableFile {
-    const file = createReadStream(join(process.cwd(), './uploads/' + filename));
+    const file = createReadStream(join(process.cwd(), process.env.UPLOAD + filename));
     console.log('file', file);
     return new StreamableFile(file);
   }

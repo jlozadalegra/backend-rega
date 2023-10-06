@@ -1,17 +1,15 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { SistemaNombresRegModule } from 'src/sistema-nombres-reg';
-import { SistemaUnidadRegModule } from 'src/sistema-unidad-reg';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtConsts } from 'src/constants';
 import { JwtStrategy } from './strategy';
 import { PassportModule } from '@nestjs/passport';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
-    SistemaNombresRegModule,
-    SistemaUnidadRegModule,
+    UsersModule,        
     PassportModule,
     JwtModule.register({
       secret: JwtConsts.JWT_ACCESS_SECRET,

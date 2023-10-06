@@ -11,10 +11,9 @@ import { CargosService } from './cargos.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateCargosDto } from './dto/create-cargos.dto';
 import { UpdateCargosDto } from './dto/update-cargos.dto';
-import { ParseIntPipe } from '@nestjs/common/pipes';
 
 @ApiTags('Cargos')
-@Controller('cargos')
+@Controller('positions')
 export class CargosController {
   constructor(private readonly cargosService: CargosService) {}
 
@@ -23,23 +22,32 @@ export class CargosController {
     return await this.cargosService.findAll();
   }
 
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return await this.cargosService.findOne(id);
+  }
+
   @Post()
   insert(@Body() body: CreateCargosDto) {
-    return this.cargosService.insert(body);
+    try {
+      return this.cargosService.insert(body);
+    } catch (error) {
+      return error;
+      console.log('Error desde el API', error);
+    }
   }
 
   @Put(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() body: UpdateCargosDto) {
+  update(@Param('id') id: string, @Body() body: UpdateCargosDto) {
     return this.cargosService.update(id, body);
   }
 
   @Delete(':id')
-  delete(@Param('id', ParseIntPipe) id: number) {
+  delete(@Param('id') id: string) {
     try {
-      return this.cargosService.delete(id);  
+      return this.cargosService.delete(id);
     } catch (error) {
-      console.log("error", error);
+      console.log('error', error);
     }
-    
   }
 }

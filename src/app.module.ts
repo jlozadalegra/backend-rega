@@ -1,31 +1,32 @@
 import { Module } from '@nestjs/common';
-import { SistemaProcDestModule } from './sistema-proc-dest/sistema-proc-dest.module';
-import { SistemaRegModule } from './sistema-reg/sistema-reg.module';
-import { SistemaNombresRegModule } from './sistema-nombres-reg/sistema-nombres-reg.module';
-import { SistemaTipDocCalModule } from './sistema-tip-doc-cal/sistema-tip-doc-cal.module';
-import { SistemaTipSalModule } from './sistema-tip-sal/sistema-tip-sal.module';
-import { SistemaUnidadRegModule } from './sistema-unidad-reg/sistema-unidad-reg.module';
-import { AuthModule } from './auth/auth.module';
+
 import { ConfigModule } from '@nestjs/config';
 import { UploadModule } from './upload/upload.module';
 import { AreasModule } from './areas';
 import { CargosModule } from './cargos';
 import { EspecialidadesModule } from './especialidades';
+import { UnidadesModule } from './unidades';
+import { UsersModule } from './users/users.module';
+import { ClasificacionDoc } from './clasificacionDoc';
+import { OtrasEntidadesModule } from './otrasEntidades';
+import { AuthModule } from './auth/auth.module';
+import { registroDocModule } from './registrosDoc';
+import { AvatarModule } from './avatar';
 
 @Module({
-  imports: [        
-    SistemaProcDestModule,
-    SistemaRegModule,
-    SistemaNombresRegModule,
-    SistemaTipDocCalModule,
-    SistemaTipSalModule,
-    SistemaUnidadRegModule,
-    AreasModule,   
-    CargosModule, 
+  imports: [
+    AuthModule,
+    UsersModule,
+    UnidadesModule,
+    AreasModule,
+    CargosModule,
     EspecialidadesModule,
-    AuthModule,  
+    ClasificacionDoc,
+    OtrasEntidadesModule,
+    registroDocModule,
+    AvatarModule,
     UploadModule,
-    ConfigModule.forRoot({ isGlobal: true }),              
+    ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [],
   providers: [],
